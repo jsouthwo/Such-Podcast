@@ -1,28 +1,56 @@
 package edu.taylor.cse.jsouthwo.suchpodcast;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 
 
 public class PodcastActivity extends ActionBarActivity {
+	private ListView mList;
+    ArrayAdapter<String> adapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podcast);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
+        }
+        mList = (ListView) findViewById(R.id.list);
+        adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
+        new GetRssFeed().execute("http://www.sciencefriday.com/audio/scifriaudio.xml");
+    }
+	
+	private class GetRssFeed extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                RssReader rssReader = new RssReader(params[0]);
+                for (RssItem item : rssReader.getItems())
+                    adapter.add(item.getTitle());
+            } catch (Exception e) {
+                Log.v("Error Parsing Data", e + "");
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter.notifyDataSetChanged();
+            mList.setAdapter(adapter);
         }
     }
 
