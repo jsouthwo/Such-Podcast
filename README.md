@@ -1,7 +1,8 @@
 Such Podcast
 ===========
-1. What is Such Podcast?
+Such Podcast FAQ
 
+1. What is Such Podcast?
 Such Podcast is an Android mobile app made by Doge-Driven-Development (3D) that allows
 the user to download and listen to their favorite podcast episodes whenever they like.
 Simplicity is the prevailing principle behind Such Podcast. Unlike more heavy-handed
