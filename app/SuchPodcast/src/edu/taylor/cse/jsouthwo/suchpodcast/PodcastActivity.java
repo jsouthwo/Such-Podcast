@@ -23,13 +23,14 @@ public class PodcastActivity extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podcast);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.container, new PlaceholderFragment())
+//                    .commit();
+//        }
         mList = (ListView) findViewById(R.id.list);
         adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
+        Log.e("Test", adapter.toString());
         new GetRssFeed().execute("http://www.sciencefriday.com/audio/scifriaudio.xml");
     }
 	
