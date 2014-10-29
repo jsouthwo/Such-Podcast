@@ -1,5 +1,7 @@
 package edu.taylor.cse.jsouthwo.suchpodcast;
 
+import java.util.ArrayList;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +23,7 @@ import android.widget.ListView;
 public class PodcastActivity extends ActionBarActivity {
 	private ListView mList;
     ArrayAdapter<String> adapter;
+    ArrayList<Podcast> podcastList = new ArrayList<Podcast>();
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +40,7 @@ public class PodcastActivity extends ActionBarActivity {
 			
 			@Override
 			public void onClick(View v) {
-				createPodcast(textBox.getText().toString());
+				createPodcast(textBox.getText().toString()); //Takes the value from the input field and adds a podcast
 			}
 		});
     }
@@ -57,6 +61,8 @@ public class PodcastActivity extends ActionBarActivity {
                 newPodcast.setTitle(rssReader.getChannelTitle());
                 adapter.add(newPodcast.getPodcastTitle());
                 newPodcast.setList(rssReader.getItems());
+                podcastList.add(newPodcast);
+                
             } catch (Exception e) {
                 Log.v("Error Parsing Data", e + "");
             }
@@ -68,6 +74,19 @@ public class PodcastActivity extends ActionBarActivity {
             super.onPostExecute(aVoid);
             adapter.notifyDataSetChanged();
             mList.setAdapter(adapter);
+            mList.setOnItemClickListener(new AdapterView.OnItemClickListener () {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					adapter.remove(podcastList.get(position).getPodcastTitle());
+					for (RssItem episode : podcastList.get(position).getEpisodeList()) {
+						adapter.add(episode.getTitle());
+					}
+					adapter.notifyDataSetChanged();
+				}
+            	
+            });
         }
     }
 
