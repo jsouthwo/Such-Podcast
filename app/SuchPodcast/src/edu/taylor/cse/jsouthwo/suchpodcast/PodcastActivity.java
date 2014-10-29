@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 
@@ -22,25 +24,39 @@ public class PodcastActivity extends ActionBarActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_podcast);
+        setContentView(R.layout.main);
 //        if (savedInstanceState == null) {
 //            getSupportFragmentManager().beginTransaction()
 //                    .add(R.id.container, new PlaceholderFragment())
 //                    .commit();
 //        }
-        mList = (ListView) findViewById(R.id.list);
-        adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
-        Log.e("Test", adapter.toString());
-        new GetRssFeed().execute("http://www.sciencefriday.com/audio/scifriaudio.xml");
+        Button addbutton = (Button)findViewById(R.id.add_button);
+        final EditText textBox = (EditText)findViewById(R.id.editText1);
+        addbutton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				createPodcast(textBox.getText().toString());
+			}
+		});
     }
+	
+	private void createPodcast(String url) {
+		setContentView(R.layout.activity_podcast);
+		mList = (ListView) findViewById(R.id.list);
+        adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
+        new GetRssFeed().execute(url);
+	}
 	
 	private class GetRssFeed extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
             try {
                 RssReader rssReader = new RssReader(params[0]);
-                for (RssItem item : rssReader.getItems())
-                    adapter.add(item.getTitle());
+                Podcast newPodcast = new Podcast();
+                newPodcast.setTitle(rssReader.getChannelTitle());
+                adapter.add(newPodcast.getPodcastTitle());
+                newPodcast.setList(rssReader.getItems());
             } catch (Exception e) {
                 Log.v("Error Parsing Data", e + "");
             }

@@ -1,7 +1,12 @@
 package edu.taylor.cse.jsouthwo.suchpodcast;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.util.List;
 
 /*
@@ -35,5 +40,21 @@ public class RssReader {
         //Pass SaxParser the RssHandler that was created.
         saxParser.parse(rssUrl, handler);
         return handler.getRssItemList();
+    }
+    
+    public String getChannelTitle() throws ParserConfigurationException, SAXException {
+    	SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser saxParser = factory.newSAXParser();
+    	RssHandler handler = new RssHandler();
+    	try {
+			saxParser.parse(rssUrl, handler);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return handler.getChannelTitle();
     }
 }

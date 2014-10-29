@@ -28,6 +28,8 @@ import java.util.List;
 public class RssHandler extends DefaultHandler {
     private List<RssItem> rssItemList;
     private RssItem currentItem;
+    private int titleCounter = 0;
+    private String thisChannelTitle = "Test";
     private boolean parsingTitle;
     private boolean parsingLink;
     private boolean parsingDescription;
@@ -40,6 +42,10 @@ public class RssHandler extends DefaultHandler {
     public List<RssItem> getRssItemList() {
         return rssItemList;
     }
+    
+    public String getChannelTitle() {
+    	return thisChannelTitle;
+    }
 
 
     //Called when an opening tag is reached, such as <item> or <title>
@@ -47,8 +53,10 @@ public class RssHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (qName.equals("item"))
             currentItem = new RssItem();
-        else if (qName.equals("title"))
+        else if (qName.equals("title")) {
+        	titleCounter += 1;
             parsingTitle = true;
+        }
         else if (qName.equals("link"))
             parsingLink = true;
         else if (qName.equals("description"))
@@ -87,6 +95,11 @@ public class RssHandler extends DefaultHandler {
                 //If parsingDescription is true, then that means we are inside a <description> tag so the text is the description of an item.
             else if (parsingDescription)
                 currentItem.setDescription(new String(ch, start, length));
+        }
+        if ( parsingTitle ) {
+        	if ( titleCounter == 1 ) {
+        		thisChannelTitle = new String(ch,start,length);
+        	}
         }
     }
 }
