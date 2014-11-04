@@ -18,8 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-
-
 public class PodcastActivity extends ActionBarActivity {
 	private ListView mList;
     ArrayAdapter<String> adapter;
@@ -29,14 +27,14 @@ public class PodcastActivity extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-//        if (savedInstanceState == null) {
+//        if (savedInstanceState == null) {								//Commented out fragment stuff
 //            getSupportFragmentManager().beginTransaction()
 //                    .add(R.id.container, new PlaceholderFragment())
 //                    .commit();
 //        }
-        Button addbutton = (Button)findViewById(R.id.add_button);
-        final EditText textBox = (EditText)findViewById(R.id.editText1);
-        addbutton.setOnClickListener(new View.OnClickListener() {
+        Button addbutton = (Button)findViewById(R.id.add_button);		//Create add button
+        final EditText textBox = (EditText)findViewById(R.id.editText1);//Create a text box for the feed url
+        addbutton.setOnClickListener(new View.OnClickListener() {		//Put an event listener on the add button
 			
 			@Override
 			public void onClick(View v) {
@@ -44,7 +42,11 @@ public class PodcastActivity extends ActionBarActivity {
 			}
 		});
     }
-	
+	/**
+	 * This is called when the add button has been clicked by the user.
+	 * It changes the view and calls the GetRssFeed execute function on the url parameter.
+	 * @param url	the string url that was contained in the text box when the add button was pushed.
+	 */
 	private void createPodcast(String url) {
 		setContentView(R.layout.activity_podcast);
 		mList = (ListView) findViewById(R.id.list);
@@ -53,15 +55,21 @@ public class PodcastActivity extends ActionBarActivity {
 	}
 	
 	private class GetRssFeed extends AsyncTask<String, Void, Void> {
+		
         @Override
+        /**
+         * This is called when createPodcast calls the GetRssFeed execute method. It creates a new podcast to add to
+         * the podcastList member list.
+         */
         protected Void doInBackground(String... params) {
             try {
-                RssReader rssReader = new RssReader(params[0]);
-                Podcast newPodcast = new Podcast();
-                newPodcast.setTitle(rssReader.getChannelTitle());
-                adapter.add(newPodcast.getPodcastTitle());
-                newPodcast.setList(rssReader.getItems());
-                podcastList.add(newPodcast);
+                RssReader rssReader = new RssReader(params[0]);		//Creates an RssReader using the url
+                Podcast newPodcast = new Podcast();					//Creates a Podcast object
+                newPodcast.setUrl(params[0]);						//params[0] is the URL passed into the function
+                newPodcast.setTitle(rssReader.getChannelTitle());	//Sets the title of the new Podcast object using the RssReader
+                adapter.add(newPodcast.getPodcastTitle());			//Adds the title to the listview adapter
+                newPodcast.setList(rssReader.getItems());			//Populates the newPodcast member list with the podcast episodes
+                podcastList.add(newPodcast);						//Adds newPodcast to the podcastList
                 
             } catch (Exception e) {
                 Log.v("Error Parsing Data", e + "");
@@ -77,11 +85,15 @@ public class PodcastActivity extends ActionBarActivity {
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener () {
 
 				@Override
+				/**
+				 * This function describes what the application should do in the event that a user clicks on a list item in the
+				 * listview. 
+				 */
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					adapter.remove(podcastList.get(position).getPodcastTitle());
-					for (RssItem episode : podcastList.get(position).getEpisodeList()) {
-						adapter.add(episode.getTitle());
+					adapter.remove(podcastList.get(position).getPodcastTitle());			//Remove the listitem containing the podcast name
+					for (RssItem episode : podcastList.get(position).getEpisodeList()) {	//Loops through the episode list and
+						adapter.add(episode.getTitle());									//Adds each episode's title to the listview adapter
 					}
 					adapter.notifyDataSetChanged();
 				}
