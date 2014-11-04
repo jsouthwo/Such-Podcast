@@ -3,7 +3,6 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
 import java.util.ArrayList;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,14 +26,10 @@ public class PodcastActivity extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-//        if (savedInstanceState == null) {								//Commented out fragment stuff
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.container, new PlaceholderFragment())
-//                    .commit();
-//        }
-        Button addbutton = (Button)findViewById(R.id.add_button);		//Create add button
-        final EditText textBox = (EditText)findViewById(R.id.editText1);//Create a text box for the feed url
-        addbutton.setOnClickListener(new View.OnClickListener() {		//Put an event listener on the add button
+
+        Button addbutton = (Button)findViewById(R.id.add_button);
+        final EditText textBox = (EditText)findViewById(R.id.editText1);
+        addbutton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -120,21 +115,5 @@ public class PodcastActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_podcast, container, false);
-            return rootView;
-        }
     }
 }
