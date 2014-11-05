@@ -10,9 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.ImageButton;
 
 public class AddActivity extends ActionBarActivity {
 
@@ -21,7 +20,7 @@ public class AddActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add);
 
-        Button addbutton = (Button)findViewById(R.id.add_button);
+        ImageButton addbutton = (ImageButton)findViewById(R.id.add_button);
         final EditText textBox = (EditText)findViewById(R.id.editText1);
         addbutton.setOnClickListener(new View.OnClickListener() {
 			
