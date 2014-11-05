@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.*;
 
 public class PodcastActivity extends ActionBarActivity {
 	private ListView mList;
@@ -27,7 +28,7 @@ public class PodcastActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        Button addbutton = (Button)findViewById(R.id.add_button);
+        ImageButton addbutton = (ImageButton)findViewById(R.id.add_button);
         final EditText textBox = (EditText)findViewById(R.id.editText1);
         addbutton.setOnClickListener(new View.OnClickListener() {
 			
