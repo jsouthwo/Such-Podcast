@@ -29,7 +29,7 @@ public class RssHandler extends DefaultHandler {
     private List<RssItem> rssItemList;
     private RssItem currentItem;
     private int titleCounter = 0;
-    private String thisChannelTitle = "Test";
+    private String thisChannelTitle;
     private boolean parsingTitle;
     private boolean parsingLink;
     private boolean parsingDescription;

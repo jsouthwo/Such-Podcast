@@ -38,18 +38,64 @@ public class AddActivity extends ActionBarActivity {
 	 * @param url	the string url that was contained in the text box when the add button was pushed.
 	 */
 	private void createPodcast(String url) {
-		//new GetRssFeed().execute(url);
 	    Intent intent = new Intent(this, PodcastActivity.class);
-//	    intent.putExtra("called", true);
 	    startActivity( intent );  
-		/*
-		setContentView(R.layout.activity_podcast);
-		mList = (ListView) findViewById(R.id.list);
-        adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
-        new GetRssFeed().execute(url);
-        */
+	    
+        PodcastActivity.adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
+		new GetRssFeed().execute(url);
 	}
 	
+	private class GetRssFeed extends AsyncTask<String, Void, Void> {
+	
+    @Override
+    /**
+     * This is called when createPodcast calls the GetRssFeed execute method. It creates a new podcast to add to
+     * the podcastList member list.
+     */
+    protected Void doInBackground(String... params) {
+        try {
+            RssReader rssReader = new RssReader(params[0]);		//Creates an RssReader using the url
+            Podcast newPodcast = new Podcast();					//Creates a Podcast object
+            newPodcast.setUrl(params[0]);						//params[0] is the URL passed into the function
+            newPodcast.setTitle(rssReader.getChannelTitle());	//Sets the title of the new Podcast object using the RssReader
+            PodcastActivity.adapter.add(newPodcast.getPodcastTitle());			//Adds the title to the listview adapter
+            newPodcast.setList(rssReader.getItems());			//Populates the newPodcast member list with the podcast episodes
+            PodcastActivity.podcastList.add(newPodcast);						//Adds newPodcast to the podcastList
+            
+        } catch (Exception e) {
+            Log.v("Error Parsing Data", e + "");
+        }
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        PodcastActivity.adapter.notifyDataSetChanged();
+        PodcastActivity.mList.setAdapter(PodcastActivity.adapter);
+        PodcastActivity.mList.setOnItemClickListener(new AdapterView.OnItemClickListener () {
+
+			@Override
+			/**
+			 * This function describes what the application should do in the event that a user clicks on a list item in the
+			 * listview. 
+			 */
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				PodcastActivity.adapter.clear();
+				int counter = 0;
+				for (RssItem episode : PodcastActivity.podcastList.get(position).getEpisodeList()) {	//Loops through the episode list and
+					PodcastActivity.adapter.add(episode.getTitle());
+					counter += 1;
+					if ( counter > 4 )
+						break;
+				}
+				PodcastActivity.adapter.notifyDataSetChanged();
+			}
+        	
+        });
+    }
+}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

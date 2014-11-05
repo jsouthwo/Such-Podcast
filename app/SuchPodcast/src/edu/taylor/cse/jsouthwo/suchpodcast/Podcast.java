@@ -2,6 +2,7 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
 
 import java.util.List;
 
+
 public class Podcast {
 	private String url;
 	private String podcastTitle;

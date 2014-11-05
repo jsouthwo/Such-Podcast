@@ -17,10 +17,10 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
  */
 
 public class RssItem {
-    String title;
-    String description;
-    String link;
-    String imageUrl;
+    private String title;
+    private String description;
+    private String link;
+    private String imageUrl;
 
     public String getDescription() {
         return description;
