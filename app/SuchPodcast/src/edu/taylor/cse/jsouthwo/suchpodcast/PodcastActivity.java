@@ -26,7 +26,7 @@ public class PodcastActivity extends ActionBarActivity {
         mList = (ListView) findViewById(R.id.list);
 
 
-        Button addLink = (Button)findViewById(R.id.add_link);
+        ImageButton addLink = (ImageButton)findViewById(R.id.add_link);
         addLink.setOnClickListener(new View.OnClickListener() {
 
 			
