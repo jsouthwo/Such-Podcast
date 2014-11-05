@@ -1,15 +1,43 @@
-<!-- <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" -->
-<!--     xmlns:tools="http://schemas.android.com/tools" -->
-<!--     android:id="@+id/container" -->
-<!--     android:layout_width="match_parent" -->
-<!--     android:layout_height="match_parent" -->
-<!--     tools:context="edu.taylor.cse.jsouthwo.suchpodcast.PodcastActivity" -->
-<!--     tools:ignore="MergeRootFrame"  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
     
-    
-<!--     /> -->
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/list"
-          android:layout_width="fill_parent"
-          android:layout_height="fill_parent"
-	/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal" >
+
+	    <FrameLayout
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:layout_gravity="left" >
+	
+		     <Button
+		         android:id="@+id/add_link"
+		         style="?android:attr/buttonStyleSmall"
+		         android:layout_width="wrap_content"
+		         android:layout_height="wrap_content"
+		         android:text="Add" />
+	
+	    </FrameLayout>
+	 
+	    
+	    <FrameLayout
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:layout_gravity="right" >
+	
+		     <Button
+		         android:id="@+id/download_button"
+		         style="?android:attr/buttonStyleSmall"
+		         android:layout_width="wrap_content"
+		         android:layout_height="wrap_content"
+		         android:text="Download" />
+	
+	    </FrameLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
