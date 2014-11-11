@@ -40,7 +40,7 @@ public class PodcastActivity extends ActionBarActivity {
 			}
 		});
         
-        Button downloadButton = (Button)findViewById(R.id.download_button);
+        ImageButton downloadButton = (ImageButton)findViewById(R.id.download_button);
         downloadButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
