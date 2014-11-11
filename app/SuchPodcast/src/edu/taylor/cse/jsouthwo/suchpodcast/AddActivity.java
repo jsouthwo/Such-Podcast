@@ -39,10 +39,11 @@ public class AddActivity extends ActionBarActivity {
 	 */
 	private void createPodcast(String url) {
 	    Intent intent = new Intent(this, PodcastActivity.class);
-	    startActivity( intent );  
-	    
+
         PodcastActivity.adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
 		new GetRssFeed().execute(url);
+	    startActivity( intent );  
+	    
 	}
 	
 	private class GetRssFeed extends AsyncTask<String, Void, Void> {
