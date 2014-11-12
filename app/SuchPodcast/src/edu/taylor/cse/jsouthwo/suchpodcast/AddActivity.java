@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Button;
 
 public class AddActivity extends ActionBarActivity {
 
@@ -20,7 +21,7 @@ public class AddActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add);
 
-        ImageButton addbutton = (ImageButton)findViewById(R.id.add_button);
+        Button addbutton = (Button)findViewById(R.id.add_button);
         final EditText textBox = (EditText)findViewById(R.id.editText1);
         addbutton.setOnClickListener(new View.OnClickListener() {
 			
@@ -38,10 +39,11 @@ public class AddActivity extends ActionBarActivity {
 	 */
 	private void createPodcast(String url) {
 	    Intent intent = new Intent(this, PodcastActivity.class);
-	    startActivity( intent );  
-	    
+
         PodcastActivity.adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
 		new GetRssFeed().execute(url);
+	    startActivity( intent );  
+	    
 	}
 	
 	private class GetRssFeed extends AsyncTask<String, Void, Void> {

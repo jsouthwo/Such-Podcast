@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,8 +23,8 @@ public class PodcastActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podcast);
         mList = (ListView) findViewById(R.id.list);
-
-        Button addLink = (Button)findViewById(R.id.add_link);
+        
+        ImageButton addLink = (ImageButton)findViewById(R.id.add_link);
         addLink.setOnClickListener(new View.OnClickListener() {
 
 			
@@ -37,7 +38,7 @@ public class PodcastActivity extends ActionBarActivity {
 			}
 		});
         
-        Button downloadButton = (Button)findViewById(R.id.download_button);
+        ImageButton downloadButton = (ImageButton)findViewById(R.id.download_button);
         downloadButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override

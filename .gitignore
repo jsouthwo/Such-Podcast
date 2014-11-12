@@ -24,5 +24,9 @@ proguard/
 
 # Log Files
 *.log
-#Mac Terminal
+
+# Mac Terminal
 .DS_Store
+
+# project.properties
+project.properties
