@@ -1,7 +1,6 @@
 package edu.taylor.cse.jsouthwo.suchpodcast;
 
 import java.util.ArrayList;
-
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class PodcastActivity extends ActionBarActivity {
@@ -24,7 +22,6 @@ public class PodcastActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podcast);
         mList = (ListView) findViewById(R.id.list);
-
 
         Button addLink = (Button)findViewById(R.id.add_link);
         addLink.setOnClickListener(new View.OnClickListener() {
