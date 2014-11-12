@@ -1,0 +1,2 @@
+Hooray for learning new command lines! Due to the errors with my GitHub GUI, I have decided to switch to a shell for my git committing needs. This is to be my test commission.
+-Sean Mitchem
