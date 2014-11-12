@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Podcast {
 	private String url;
-	private String podcastTitle;
+	private String title;
 	private List<RssItem> episodeList;
 	
 	public void setTitle(String newTitle) {
-		podcastTitle = newTitle;
+		title = newTitle;
 	}
 	
 	public void setList(List<RssItem> rssList) {
@@ -17,7 +17,7 @@ public class Podcast {
 	}
 
 	public String getPodcastTitle() {
-		return podcastTitle;
+		return title;
 	}
 
 	public List<RssItem> getEpisodeList() {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,19 @@ public class PodcastActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podcast);
         mList = (ListView) findViewById(R.id.list);
+        
+        try {
+            RssReader rssReader = new RssReader(params[0]);		//Creates an RssReader using the url
+            Podcast newPodcast = new Podcast();					//Creates a Podcast object
+            newPodcast.setUrl(params[0]);						//params[0] is the URL passed into the function
+            newPodcast.setTitle(rssReader.getChannelTitle());	//Sets the title of the new Podcast object using the RssReader
+            PodcastActivity.adapter.add(newPodcast.getPodcastTitle());			//Adds the title to the listview adapter
+            newPodcast.setList(rssReader.getItems());			//Populates the newPodcast member list with the podcast episodes
+            PodcastActivity.podcastList.add(newPodcast);						//Adds newPodcast to the podcastList
+            
+        } catch (Exception e) {
+            Log.v("Error Parsing Data", e + "");
+        }
 
 
         ImageButton addLink = (ImageButton)findViewById(R.id.add_link);
@@ -32,11 +46,8 @@ public class PodcastActivity extends ActionBarActivity {
 			
 			@Override
 			public void onClick(View v) {
-//				Toast.makeText(getApplicationContext(), "Taking you to add a podcast.", Toast.LENGTH_SHORT).show();
 			    Intent intent = new Intent(getApplicationContext(), AddActivity.class);
 			    startActivity( intent );
-
-//				createPodcast(textBox.getText().toString()); //Takes the value from the input field and adds a podcast
 			}
 		});
         
@@ -46,7 +57,6 @@ public class PodcastActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), "Downloading all new podcasts.", Toast.LENGTH_LONG).show();
-//				createPodcast(textBox.getText().toString()); //Takes the value from the input field and adds a podcast
 			}
 		});
 
