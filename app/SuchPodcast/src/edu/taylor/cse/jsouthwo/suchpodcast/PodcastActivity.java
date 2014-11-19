@@ -1,8 +1,10 @@
 package edu.taylor.cse.jsouthwo.suchpodcast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,8 +33,10 @@ public class PodcastActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 //				Toast.makeText(getApplicationContext(), "Taking you to add a podcast.", Toast.LENGTH_SHORT).show();
-			    Intent intent = new Intent(getApplicationContext(), AddActivity.class);
+			    Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
+			    intent.putExtra("EXTRA_PODCAST_NAME", "test");
 			    startActivity( intent );
+				
 
 //				createPodcast(textBox.getText().toString()); //Takes the value from the input field and adds a podcast
 			}
