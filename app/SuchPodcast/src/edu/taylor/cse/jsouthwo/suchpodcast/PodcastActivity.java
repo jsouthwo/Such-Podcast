@@ -3,9 +3,14 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
 import java.io.IOException;
 import java.util.ArrayList;
 import android.support.v7.app.ActionBarActivity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,20 +30,14 @@ public class PodcastActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podcast);
         mList = (ListView) findViewById(R.id.list);
-        
+
         ImageButton addLink = (ImageButton)findViewById(R.id.add_link);
         addLink.setOnClickListener(new View.OnClickListener() {
-
-			
 			@Override
 			public void onClick(View v) {
-//				Toast.makeText(getApplicationContext(), "Taking you to add a podcast.", Toast.LENGTH_SHORT).show();
 			    Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
 			    intent.putExtra("EXTRA_PODCAST_NAME", "test");
 			    startActivity( intent );
-				
-
-//				createPodcast(textBox.getText().toString()); //Takes the value from the input field and adds a podcast
 			}
 		});
         
@@ -48,7 +47,24 @@ public class PodcastActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), "Downloading all new podcasts.", Toast.LENGTH_LONG).show();
-//				createPodcast(textBox.getText().toString()); //Takes the value from the input field and adds a podcast
+
+				String url = "http://www.podtrac.com/pts/redirect.mp3/traffic.libsyn.com/sciencefriday/scifri201409191.mp3";
+				DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+				request.setDescription("Some description");
+				request.setTitle("Some title");
+				// in order for this if to run, you must use the android 3.2 to compile your app
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				    request.allowScanningByMediaScanner();
+				    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+				} else {
+					Toast.makeText(getApplicationContext(), "Your Android version is incompatible.", Toast.LENGTH_LONG).show();
+					return; 
+				}
+				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "test.mp3");
+
+				// get download service and enqueue file
+				DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+				manager.enqueue(request);
 			}
 		});
 
