@@ -61,10 +61,6 @@ public class RssHandler extends DefaultHandler {
             parsingLink = true;
         else if (qName.equals("description"))
             parsingDescription = true;
-        else if (qName.equals("media:thumbnail") || qName.equals("media:content") || qName.equals("image")) {
-            if (attributes.getValue("url") != null)
-                currentItem.setImageUrl(attributes.getValue("url"));
-        }
     }
 
     //Called when a closing tag is reached, such as </item> or </title>

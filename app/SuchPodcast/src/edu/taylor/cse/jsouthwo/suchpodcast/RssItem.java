@@ -19,19 +19,11 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
 public class RssItem {
     private String title;
     private String description;
-    private String link;
-    private String imageUrl;
+    private String url;
+    private String filename;
 
     public String getDescription() {
         return description;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public String getTitle() {
@@ -39,11 +31,15 @@ public class RssItem {
     }
 
     public String getLink() {
-        return link;
+        return url;
     }
 
+	public String getFilename() {
+		return filename;
+	}
+
     public void setLink(String link) {
-        this.link = link;
+        this.url = link;
     }
 
     public void setDescription(String description) {
@@ -53,4 +49,8 @@ public class RssItem {
     public void setTitle(String title) {
         this.title = title;
     }
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
 }

@@ -7,19 +7,18 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class DB {
 
-	private PodcastOpenHelper dbHelper;
+	private DatabaseHelper dbHelper;
 
 	private SQLiteDatabase database;
 
 	public final static String PODCAST_ID = "_id";
 	public final static String PODCAST_URL = "url";
 	public final static String PODCAST_TITLE = "title";
-	public final static String PODCAST_TABLE = PodcastOpenHelper.PODCAST_TABLE;
+	public final static String PODCAST_TABLE = DatabaseHelper.PODCAST_TABLE;
 
-	// public final static String PODCAST_NAME = "name";
 
 	public DB(Context context) {
-		dbHelper = new PodcastOpenHelper(context);
+		dbHelper = new DatabaseHelper(context);
 		database = dbHelper.getWritableDatabase();
 	}
 

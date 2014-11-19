@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -46,17 +45,6 @@ public class PodcastActivity extends ActionBarActivity {
 		});
 
 	}
-	
-//	protected void onResume() {
-//		super.onResume();
-//		if ( adapter.getCount() == 0 ) {
-//			return;
-//		}
-//		else {
-//			mList.setAdapter(adapter);
-//		}
-//	}
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
