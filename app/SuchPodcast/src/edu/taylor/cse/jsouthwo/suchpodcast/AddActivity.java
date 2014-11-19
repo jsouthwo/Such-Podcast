@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Button;
 
 public class AddActivity extends ActionBarActivity {
@@ -83,13 +82,16 @@ public class AddActivity extends ActionBarActivity {
 			 */
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				PodcastActivity.adapter.clear();
-				int counter = 0;
-				for (RssItem episode : PodcastActivity.podcastList.get(position).getEpisodeList()) {	//Loops through the episode list and
-					PodcastActivity.adapter.add(episode.getTitle());
-					counter += 1;
-					if ( counter > 4 )
-						break;
+				if ( PodcastActivity.inEpisodeDisplay ) {
+					RssItem episodeToPlay = PodcastActivity.currentDisplayedPodcast.getEpisodeList().get(position);
+					Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
+					intent.putExtra("episodeName", episodeToPlay.getTitle());
+					intent.putExtra("episodeDescription", episodeToPlay.getDescription());
+//					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
+					startActivity( intent );
+				} else {
+					showEpisodes(position);
+					PodcastActivity.inEpisodeDisplay = true;
 				}
 				PodcastActivity.adapter.notifyDataSetChanged();
 			}
@@ -97,7 +99,19 @@ public class AddActivity extends ActionBarActivity {
         });
     }
 }
-
+	
+	public void showEpisodes(int position) {
+		PodcastActivity.adapter.clear();
+		PodcastActivity.currentDisplayedPodcast = PodcastActivity.podcastList.get(position);
+		int counter = 0;
+		for (RssItem episode : PodcastActivity.podcastList.get(position).getEpisodeList()) {	//Loops through the episode list and
+			PodcastActivity.adapter.add(episode.getTitle());
+			counter += 1;
+			if ( counter > 4 )
+				break;
+		}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

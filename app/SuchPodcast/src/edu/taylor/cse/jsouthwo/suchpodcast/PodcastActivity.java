@@ -24,6 +24,8 @@ public class PodcastActivity extends ActionBarActivity {
 	public static ListView mList; 
     public static ArrayAdapter<String> adapter;
     public static ArrayList<Podcast> podcastList = new ArrayList<Podcast>();
+    public static boolean inEpisodeDisplay = false;
+    public static Podcast currentDisplayedPodcast;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,7 @@ public class PodcastActivity extends ActionBarActivity {
         addLink.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-			    Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
-			    intent.putExtra("EXTRA_PODCAST_NAME", "test");
+			    Intent intent = new Intent(getApplicationContext(), AddActivity.class);
 			    startActivity( intent );
 			}
 		});
