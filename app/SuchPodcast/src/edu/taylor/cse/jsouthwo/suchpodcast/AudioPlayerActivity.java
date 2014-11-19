@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
@@ -50,7 +51,7 @@ public class AudioPlayerActivity extends Activity {
 		mediaPlayer = MediaPlayer.create(this, R.raw.scifri201411071);
 		seekbar.setClickable(false);
 		pauseButton.setEnabled(false);
-
+		songName.setSelected(true);
 	}
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD) public void play(View view){
@@ -78,6 +79,7 @@ public class AudioPlayerActivity extends Activity {
 		myHandler.postDelayed(UpdateSongTime,100);
 		pauseButton.setEnabled(true);
 		playButton.setEnabled(false);
+		songName.setSelected(true);
 	}
 
 	private Runnable UpdateSongTime = new Runnable() {
@@ -97,17 +99,20 @@ public class AudioPlayerActivity extends Activity {
 		mediaPlayer.pause();
 		pauseButton.setEnabled(false);
 		playButton.setEnabled(true);
+		songName.setSelected(true);
 	}	
 	public void forward(View view){
 		int temp = (int)startTime;
 		if((temp+forwardTime)<=finalTime){
 			startTime = startTime + forwardTime;
 			mediaPlayer.seekTo((int) startTime);
+			songName.setSelected(true);
 		}
 		else{
 			Toast.makeText(getApplicationContext(), 
 					"Cannot jump forward 20 seconds", 
 					Toast.LENGTH_SHORT).show();
+			songName.setSelected(true);
 		}
 
 	}
@@ -116,11 +121,13 @@ public class AudioPlayerActivity extends Activity {
 		if((temp-backwardTime)>0){
 			startTime = startTime - backwardTime;
 			mediaPlayer.seekTo((int) startTime);
+			songName.setSelected(true);
 		}
 		else{
 			Toast.makeText(getApplicationContext(), 
 					"Cannot jump backward 10 seconds",
 					Toast.LENGTH_SHORT).show();
+			songName.setSelected(true);
 		}
 
 	}
@@ -130,6 +137,13 @@ public class AudioPlayerActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		//   getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		mediaPlayer.stop();
+		myHandler.removeCallbacks(UpdateSongTime);
+	    super.onBackPressed();
 	}
 
 }
