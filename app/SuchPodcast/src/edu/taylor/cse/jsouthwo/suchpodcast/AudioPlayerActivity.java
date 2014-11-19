@@ -8,12 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -21,7 +17,7 @@ import android.widget.Toast;
 
 public class AudioPlayerActivity extends Activity {
 
-	public TextView songName,startTimeField,endTimeField;
+	public TextView songName,episodeDescriptionBox,startTimeField,endTimeField;
 	private MediaPlayer mediaPlayer;
 	private double startTime = 0;
 	private double finalTime = 0;
@@ -31,20 +27,26 @@ public class AudioPlayerActivity extends Activity {
 	private SeekBar seekbar;
 	private ImageButton playButton,pauseButton;
 	public static int oneTimeOnly = 0;
-	private String podcastName;
+	private String episodeName,episodeDescription;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		podcastName = getIntent().getExtras().getString("EXTRA_PODCAST_NAME");
+		episodeName = getIntent().getExtras().getString("episodeName");
+		episodeDescription = getIntent().getExtras().getString("episodeDescription");
+		
 		setContentView(R.layout.activity_audio_player);
+		
 		songName = (TextView)findViewById(R.id.textView4);
 		startTimeField =(TextView)findViewById(R.id.textView1);
 		endTimeField =(TextView)findViewById(R.id.textView2);
 		seekbar = (SeekBar)findViewById(R.id.seekBar1);
 		playButton = (ImageButton)findViewById(R.id.imageButton1);
 		pauseButton = (ImageButton)findViewById(R.id.imageButton2);
-		songName.setText(podcastName);
+		episodeDescriptionBox = (TextView)findViewById(R.id.textView5);
+		
+		songName.setText(episodeName);
+		episodeDescriptionBox.setText(episodeDescription);
 		mediaPlayer = MediaPlayer.create(this, R.raw.scifri201411071);
 		seekbar.setClickable(false);
 		pauseButton.setEnabled(false);
@@ -52,8 +54,6 @@ public class AudioPlayerActivity extends Activity {
 	}
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD) public void play(View view){
-		Toast.makeText(getApplicationContext(), "Playing sound", 
-				Toast.LENGTH_SHORT).show();
 		mediaPlayer.start();
 		finalTime = mediaPlayer.getDuration();
 		startTime = mediaPlayer.getCurrentPosition();
@@ -94,9 +94,6 @@ public class AudioPlayerActivity extends Activity {
 		}
 	};
 	public void pause(View view){
-		Toast.makeText(getApplicationContext(), "Pausing sound", 
-				Toast.LENGTH_SHORT).show();
-
 		mediaPlayer.pause();
 		pauseButton.setEnabled(false);
 		playButton.setEnabled(true);
