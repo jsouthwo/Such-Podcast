@@ -59,7 +59,7 @@ public class AddActivity extends ActionBarActivity {
             Podcast newPodcast = new Podcast();					//Creates a Podcast object
             newPodcast.setUrl(params[0]);						//params[0] is the URL passed into the function
             newPodcast.setTitle(rssReader.getChannelTitle());	//Sets the title of the new Podcast object using the RssReader
-            PodcastActivity.adapter.add(newPodcast.getPodcastTitle());			//Adds the title to the listview adapter
+            PodcastActivity.adapter.add(newPodcast.getTitle());			//Adds the title to the listview adapter
             newPodcast.setList(rssReader.getItems());			//Populates the newPodcast member list with the podcast episodes
             PodcastActivity.podcastList.add(newPodcast);						//Adds newPodcast to the podcastList
             

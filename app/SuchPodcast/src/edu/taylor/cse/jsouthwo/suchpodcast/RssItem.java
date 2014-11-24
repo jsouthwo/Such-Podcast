@@ -17,10 +17,12 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
  */
 
 public class RssItem {
+	private int id;
     private String title;
     private String description;
     private String url;
     private String filename;
+    private String createdAt;
 
     public String getDescription() {
         return description;
@@ -30,7 +32,7 @@ public class RssItem {
         return title;
     }
 
-    public String getLink() {
+    public String getUrl() {
         return url;
     }
 
@@ -38,8 +40,12 @@ public class RssItem {
 		return filename;
 	}
 
-    public void setLink(String link) {
-        this.url = link;
+	public int getId() {
+		return id;
+	}
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public void setDescription(String description) {
@@ -52,5 +58,17 @@ public class RssItem {
 
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
 	}
 }

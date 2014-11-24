@@ -4,6 +4,7 @@ import java.util.List;
 
 
 public class Podcast {
+	private int id;
 	private String url;
 	private String title;
 	private List<RssItem> episodeList;
@@ -16,7 +17,7 @@ public class Podcast {
 		episodeList = rssList;
 	}
 
-	public String getPodcastTitle() {
+	public String getTitle() {
 		return title;
 	}
 
@@ -30,5 +31,13 @@ public class Podcast {
 	
 	public String getUrl() {
 		return url;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
