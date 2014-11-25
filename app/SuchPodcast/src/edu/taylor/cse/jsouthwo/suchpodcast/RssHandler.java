@@ -68,6 +68,8 @@ public class RssHandler extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (qName.equals("item")) {
             //End of an item so add the currentItem to the list of items.
+        	DatabaseHelper helper = DatabaseHelper.getHelper(Global.getContext());
+        	helper.createEpisode(currentItem);
             rssItemList.add(currentItem);
             currentItem = null;
         } else if (qName.equals("title"))

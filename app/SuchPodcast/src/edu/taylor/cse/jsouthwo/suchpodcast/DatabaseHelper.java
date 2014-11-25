@@ -16,7 +16,6 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 	// Singleton implementation
 	private static DatabaseHelper helper;
-//	private static SQLiteDatabase db;
 	
     // Logcat tag
     public static final String LOG = "DatabaseHelper";
@@ -32,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_EPISODE = "Episode";
  
     // Common column names
-    private static final String KEY_ID = "id";
+    private static final String KEY_ID = "_id";
     private static final String KEY_TITLE = "title";
     private static final String KEY_URL = "url";
  
@@ -55,8 +54,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //	    		KEY_CREATED_AT + " DATETIME, " + 
 //	    		KEY_EPISODE_IDS + " LIST " + 
     		");";
-
-//    private static final String CREATE_TABLE_PODCAST = "CREATE TABLE Podcast (id INTEGER PRIMARY_KEY, url TEXT, title TEXT);";
 
     // EPISODE table create statement
     private static final String CREATE_TABLE_EPISODE = "CREATE TABLE " + TABLE_EPISODE +
@@ -87,7 +84,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
     	Log.e("DB", "Calling onCreate");
-//        db.execSQL("DROP TABLE IF EXISTS *");
         db.execSQL(CREATE_TABLE_PODCAST);// (id INTEGER PRIMARY KEY, url TEXT, title TEXT);");
         db.execSQL(CREATE_TABLE_EPISODE);
         Log.e("DB", CREATE_TABLE_PODCAST);
@@ -99,9 +95,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS *");
         onCreate(db);
     }
-    
+
     /**************************** CRUD Ops *****************************/
-    
+
     /*
      * Creating a podcast
      */
@@ -141,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_DESCRIPTION, episode.getDescription());
      
         // insert row
-        long podcast_id = db.insert(TABLE_PODCAST, null, values);
+        long episode_id = db.insert(TABLE_EPISODE, null, values);
 
         /* Keep in case you need it later.
         // assigning tags to todo
@@ -150,7 +146,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         */
      
-        return podcast_id;
+        return episode_id;
     }
 
     /*
@@ -174,13 +170,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         podcast.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
         podcast.setUrl(c.getString(c.getColumnIndex(KEY_URL)));
 //        podcast.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
-        
-        /*
-        podcast.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        podcast.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
-        podcast.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
-        */
-     
+
         return podcast;
     }
 
@@ -245,12 +235,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<RssItem> getAllEpisodes() {
         List<RssItem> episodes = new ArrayList<RssItem>();
         String selectQuery = "SELECT * FROM " + TABLE_EPISODE;
-     
+
         Log.e(LOG, selectQuery);
-     
+
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
-     
+
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
@@ -312,8 +302,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_EPISODE, KEY_ID + " = ?",
                 new String[] { String.valueOf(episode_id) });
     }
-    
-    
+
+
     /**************************** Random *****************************/
 
 	/*
