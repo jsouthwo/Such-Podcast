@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 public class RssReader {
-
+	String rssUrl;
 
     public RssReader(String url) {
         rssUrl = url;

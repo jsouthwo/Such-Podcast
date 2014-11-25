@@ -3,8 +3,10 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
 import java.util.concurrent.TimeUnit;
 
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -28,16 +30,18 @@ public class AudioPlayerActivity extends Activity {
 	private SeekBar seekbar;
 	private ImageButton playButton,pauseButton;
 	public static int oneTimeOnly = 0;
-	private String episodeName,episodeDescription;
+	private String episodeName,episodeDescription, episodeLocalDirName;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		episodeName = getIntent().getExtras().getString("episodeName");
 		episodeDescription = getIntent().getExtras().getString("episodeDescription");
+		episodeLocalDirName = getIntent().getExtras().getString("episodeLocalDirName");
 		
 		setContentView(R.layout.activity_audio_player);
 		
+		//VIEWS
 		songName = (TextView)findViewById(R.id.textView4);
 		startTimeField =(TextView)findViewById(R.id.textView1);
 		endTimeField =(TextView)findViewById(R.id.textView2);
@@ -46,9 +50,10 @@ public class AudioPlayerActivity extends Activity {
 		pauseButton = (ImageButton)findViewById(R.id.imageButton2);
 		episodeDescriptionBox = (TextView)findViewById(R.id.textView5);
 		
+		//OTHER THINGS
 		songName.setText(episodeName);
 		episodeDescriptionBox.setText(episodeDescription);
-		mediaPlayer = MediaPlayer.create(this, R.raw.scifri201411071);
+		mediaPlayer = MediaPlayer.create(this, Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/" + episodeLocalDirName));
 		seekbar.setClickable(false);
 		pauseButton.setEnabled(false);
 		songName.setSelected(true);
@@ -58,6 +63,7 @@ public class AudioPlayerActivity extends Activity {
 		mediaPlayer.start();
 		finalTime = mediaPlayer.getDuration();
 		startTime = mediaPlayer.getCurrentPosition();
+		seekbar.setProgress(500);
 		if(oneTimeOnly == 0){
 			seekbar.setMax((int) finalTime);
 			oneTimeOnly = 1;

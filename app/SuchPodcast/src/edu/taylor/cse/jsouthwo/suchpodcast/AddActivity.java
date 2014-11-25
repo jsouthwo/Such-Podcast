@@ -1,3 +1,4 @@
+
 package edu.taylor.cse.jsouthwo.suchpodcast;
 
 import android.support.v7.app.ActionBarActivity;
@@ -37,9 +38,10 @@ public class AddActivity extends ActionBarActivity {
 	 * @param url	the string url that was contained in the text box when the add button was pushed.
 	 */
 	private void createPodcast(String url) {
-	    Intent intent = new Intent(this, PodcastActivity.class);
-
-        PodcastActivity.adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
+		Intent intent = new Intent(this, PodcastActivity.class);
+		if ( PodcastActivity.adapter == null ) {
+			PodcastActivity.adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
+		}
 		new GetRssFeed().execute(url);
 	    startActivity( intent );  
 	    
@@ -58,10 +60,8 @@ public class AddActivity extends ActionBarActivity {
             Podcast newPodcast = new Podcast();					//Creates a Podcast object
             newPodcast.setUrl(params[0]);						//params[0] is the URL passed into the function
             newPodcast.setTitle(rssReader.getChannelTitle());	//Sets the title of the new Podcast object using the RssReader
-            PodcastActivity.adapter.add(newPodcast.getPodcastTitle());			//Adds the title to the listview adapter
             newPodcast.setList(rssReader.getItems());			//Populates the newPodcast member list with the podcast episodes
             PodcastActivity.podcastList.add(newPodcast);						//Adds newPodcast to the podcastList
-            
         } catch (Exception e) {
             Log.v("Error Parsing Data", e + "");
         }
@@ -71,6 +71,10 @@ public class AddActivity extends ActionBarActivity {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        PodcastActivity.adapter.clear();
+        for ( Podcast eachPodcast : PodcastActivity.podcastList ) {
+        	PodcastActivity.adapter.add(eachPodcast.getPodcastTitle());
+        }
         PodcastActivity.adapter.notifyDataSetChanged();
         PodcastActivity.mList.setAdapter(PodcastActivity.adapter);
         PodcastActivity.mList.setOnItemClickListener(new AdapterView.OnItemClickListener () {
@@ -87,6 +91,7 @@ public class AddActivity extends ActionBarActivity {
 					Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
 					intent.putExtra("episodeName", episodeToPlay.getTitle());
 					intent.putExtra("episodeDescription", episodeToPlay.getDescription());
+					intent.putExtra("episodeLocalDirName", episodeToPlay.getLocalDirName());
 //					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
 					startActivity( intent );
 				} else {
@@ -131,3 +136,5 @@ public class AddActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 }
+
+

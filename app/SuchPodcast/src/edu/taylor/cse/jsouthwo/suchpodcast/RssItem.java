@@ -21,6 +21,7 @@ public class RssItem {
     private String description;
     private String link;
     private String imageUrl;
+    private String localDirName;
 
     public String getDescription() {
         return description;
@@ -40,6 +41,14 @@ public class RssItem {
 
     public String getLink() {
         return link;
+    }
+    
+    public String getLocalDirName() {
+    	return localDirName;
+    }
+    
+    public void setLocalDirName(String name) {
+    	localDirName = name;
     }
 
     public void setLink(String link) {
