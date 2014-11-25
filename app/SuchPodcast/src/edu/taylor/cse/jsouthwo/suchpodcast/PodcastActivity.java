@@ -3,6 +3,7 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
 import java.util.ArrayList;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,17 +18,25 @@ public class PodcastActivity extends ActionBarActivity {
 	public static ListView mList; 
     public static ArrayAdapter<String> adapter;
     public static ArrayList<Podcast> podcastList = new ArrayList<Podcast>();
+    private static DatabaseHelper helper;
+    private static SQLiteDatabase db;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podcast);
-        mList = (ListView) findViewById(R.id.list);
+
+        helper = DatabaseHelper.getHelper(getApplicationContext());
+        db = helper.getWritableDatabase();
+//        Log.w("DB1","Pre");
+//        helper.onCreate(db);
+//        Log.w("DB1","Post");
         
+        mList = (ListView) findViewById(R.id.list);
+
         ImageButton addLink = (ImageButton)findViewById(R.id.add_link);
         addLink.setOnClickListener(new View.OnClickListener() {
 
-			
 			@Override
 			public void onClick(View v) {
 			    Intent intent = new Intent(getApplicationContext(), AddActivity.class);
@@ -63,6 +72,12 @@ public class PodcastActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    protected void onDestroy() {
+        super.onDestroy();
+        helper.closeDB();
+
     }
     
 }

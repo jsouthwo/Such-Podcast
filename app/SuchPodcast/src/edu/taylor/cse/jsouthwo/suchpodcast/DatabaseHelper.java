@@ -9,15 +9,17 @@ import java.util.Locale;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+	// Singleton implementation
+	private static DatabaseHelper helper;
+//	private static SQLiteDatabase db;
+	
     // Logcat tag
-    private static final String LOG = "DatabaseHelper";
+    public static final String LOG = "DatabaseHelper";
  
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -26,11 +28,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "blackeye";
 
     // Table Names
-    private static final String TABLE_PODCAST = "podcast";
-    private static final String TABLE_EPISODE = "episode";
+    private static final String TABLE_PODCAST = "Podcast";
+    private static final String TABLE_EPISODE = "Episode";
  
     // Common column names
-    private static final String KEY_ID = "_id";
+    private static final String KEY_ID = "id";
     private static final String KEY_TITLE = "title";
     private static final String KEY_URL = "url";
  
@@ -45,46 +47,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
  
     /** Table Create Statements **/
     // PODCAST table create statement
-    private static final String CREATE_TABLE_PODCAST = "CREATE TABLE" + TABLE_PODCAST +
-    		"( " +
+    private static final String CREATE_TABLE_PODCAST = "CREATE TABLE " + TABLE_PODCAST +
+    		" (" +
 	    		KEY_ID + " INTEGER PRIMARY_KEY, " +
-	    		KEY_URL + " TEXT " +
-	    		KEY_TITLE + " TEXT " +
-//	    		KEY_CREATED_AT + "DATETIME" + 
-//	    		KEY_EPISODE_IDS + "LIST" + 
+	    		KEY_URL + " TEXT, " +
+	    		KEY_TITLE + " TEXT" +
+//	    		KEY_CREATED_AT + " DATETIME, " + 
+//	    		KEY_EPISODE_IDS + " LIST " + 
     		");";
+
+//    private static final String CREATE_TABLE_PODCAST = "CREATE TABLE Podcast (id INTEGER PRIMARY_KEY, url TEXT, title TEXT);";
 
     // EPISODE table create statement
-    private static final String CREATE_TABLE_EPISODE = "CREATE TABLE" + TABLE_EPISODE +
-    		"( " +
+    private static final String CREATE_TABLE_EPISODE = "CREATE TABLE " + TABLE_EPISODE +
+    		" (" +
 	    		KEY_ID + " INTEGER PRIMARY_KEY, " +
-	    		KEY_URL + " TEXT " +
-	    		KEY_TITLE + " TEXT " +
-	    		KEY_CREATED_AT + "DATETIME" + 
-	    		KEY_FILENAME + "TEXT" +
-	    		KEY_DESCRIPTION + "TEXT" +
+	    		KEY_URL + " TEXT, " +
+	    		KEY_TITLE + " TEXT, " +
+	    		KEY_CREATED_AT + " DATETIME, " + 
+	    		KEY_FILENAME + " TEXT, " +
+	    		KEY_DESCRIPTION + " TEXT" +
     		");";
 
+    public static DatabaseHelper getHelper(Context context) {
+    	// Use the application context, which will ensure that you 
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (helper == null) {
+          helper = new DatabaseHelper(context.getApplicationContext());
+        }
+        return helper;
+      }
 
-    public DatabaseHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+//        onCreate(db);
     }
-
-	public DatabaseHelper(Context context, String name,
-			CursorFactory factory, int version) {
-		super(context, name, factory, version);
-	}
-
-	public DatabaseHelper(Context context, String name,
-			CursorFactory factory, int version,
-			DatabaseErrorHandler errorHandler) {
-		super(context, name, factory, version, errorHandler);
-	}
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_PODCAST);
+    	Log.e("DB", "Calling onCreate");
+//        db.execSQL("DROP TABLE IF EXISTS *");
+        db.execSQL(CREATE_TABLE_PODCAST);// (id INTEGER PRIMARY KEY, url TEXT, title TEXT);");
         db.execSQL(CREATE_TABLE_EPISODE);
+        Log.e("DB", CREATE_TABLE_PODCAST);
+        Log.e("DB", CREATE_TABLE_EPISODE);
     }
  
     @Override
@@ -103,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_URL, podcast.getUrl());
-        values.put(KEY_TITLE,  podcast.getTitle());
+        values.put(KEY_TITLE, podcast.getTitle());
 //        values.put(KEY_CREATED_AT, getDateTime());
      
         // insert row
@@ -152,7 +159,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Podcast getPodcast(long podcast_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_PODCAST + " WHERE "
+        String selectQuery = "SELECT * FROM " + TABLE_PODCAST + " WHERE "
                 + KEY_ID + " = " + podcast_id;
 
         Log.e(LOG, selectQuery);
@@ -183,7 +190,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public RssItem getEpisode(long episode_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_EPISODE + " WHERE "
+        String selectQuery = "SELECT * FROM " + TABLE_EPISODE + " WHERE "
                 + KEY_ID + " = " + episode_id;
 
         Log.e(LOG, selectQuery);
@@ -209,7 +216,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * */
     public List<Podcast> getAllPodcasts() {
         List<Podcast> podcasts = new ArrayList<Podcast>();
-        String selectQuery = "SELECT  * FROM " + TABLE_PODCAST;
+        String selectQuery = "SELECT * FROM " + TABLE_PODCAST;
      
         Log.e(LOG, selectQuery);
      
@@ -237,7 +244,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * */
     public List<RssItem> getAllEpisodes() {
         List<RssItem> episodes = new ArrayList<RssItem>();
-        String selectQuery = "SELECT  * FROM " + TABLE_EPISODE;
+        String selectQuery = "SELECT * FROM " + TABLE_EPISODE;
      
         Log.e(LOG, selectQuery);
      

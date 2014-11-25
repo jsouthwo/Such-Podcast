@@ -2,6 +2,7 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,15 +12,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Button;
 
 public class AddActivity extends ActionBarActivity {
+    private static DatabaseHelper helper;
+    private static SQLiteDatabase db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add);
+
+		helper = DatabaseHelper.getHelper(getApplicationContext());
+        db = helper.getWritableDatabase();
 
         Button addbutton = (Button)findViewById(R.id.add_button);
         final EditText textBox = (EditText)findViewById(R.id.editText1);
@@ -62,7 +67,9 @@ public class AddActivity extends ActionBarActivity {
             PodcastActivity.adapter.add(newPodcast.getTitle());			//Adds the title to the listview adapter
             newPodcast.setList(rssReader.getItems());			//Populates the newPodcast member list with the podcast episodes
             PodcastActivity.podcastList.add(newPodcast);						//Adds newPodcast to the podcastList
-            
+            helper.createPodcast(newPodcast);
+            Log.v(DatabaseHelper.LOG, "Creating podcast");
+
         } catch (Exception e) {
             Log.v("Error Parsing Data", e + "");
         }
