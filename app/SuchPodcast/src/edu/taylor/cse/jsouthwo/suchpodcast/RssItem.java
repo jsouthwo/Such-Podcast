@@ -17,12 +17,17 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
  */
 
 public class RssItem {
+	public static final String SCIFRI = "SciFri";
+	public static final String BAM = "BAM";
+	public static final String OTHER = "OTHER";
+
 	private int id;
     private String title;
     private String description;
     private String url;
     private String filename;
     private String createdAt;
+    private String podcast;
 
     public String getDescription() {
         return description;
@@ -70,5 +75,13 @@ public class RssItem {
 
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public String getPodcast() {
+		return podcast;
+	}
+
+	public void setPodcast(String podcast) {
+		this.podcast = podcast;
 	}
 }
