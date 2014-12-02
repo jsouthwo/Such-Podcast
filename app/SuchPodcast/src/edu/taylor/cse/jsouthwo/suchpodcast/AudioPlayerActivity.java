@@ -21,6 +21,7 @@ import android.widget.Toast;
 public class AudioPlayerActivity extends Activity {
 
 	public TextView songName,episodeDescriptionBox,startTimeField,endTimeField;
+//	private boolean firstStart = true;
 	private MediaPlayer mediaPlayer;
 	private double startTime = 0;
 	private double finalTime = 0;
@@ -31,6 +32,7 @@ public class AudioPlayerActivity extends Activity {
 	private ImageButton playButton,pauseButton;
 	public static int oneTimeOnly = 0;
 	private String episodeName,episodeDescription, episodeLocalDirName;
+	//private RssItem currentEpisode = PodcastActivity.currentDisplayedPodcast.getEpisodeList().get(getIntent().getExtras().getInt("episodePosition"));
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,10 @@ public class AudioPlayerActivity extends Activity {
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD) public void play(View view){
 		mediaPlayer.start();
+//		if ( firstStart ) {
+//			mediaPlayer.seekTo((int)currentEpisode.getCurrentPosition());
+//		}
+//		firstStart = false;
 		finalTime = mediaPlayer.getDuration();
 		startTime = mediaPlayer.getCurrentPosition();
 		seekbar.setProgress(500);
@@ -150,6 +156,11 @@ public class AudioPlayerActivity extends Activity {
 		mediaPlayer.stop();
 		myHandler.removeCallbacks(UpdateSongTime);
 	    super.onBackPressed();
+//	    if ( (startTime / finalTime) <= .98 ) {
+//	    	currentEpisode.setCurrentPosition(startTime);
+//	    } else {
+//	    	currentEpisode.setCurrentPosition(0);
+//	    }
 	}
 
 }

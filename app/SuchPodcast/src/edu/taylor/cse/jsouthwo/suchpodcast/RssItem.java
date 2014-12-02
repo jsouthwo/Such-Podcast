@@ -22,6 +22,7 @@ public class RssItem {
     private String link;
     private String imageUrl;
     private String localDirName;
+    private double currentPosition = 0;
 
     public String getDescription() {
         return description;
@@ -62,4 +63,12 @@ public class RssItem {
     public void setTitle(String title) {
         this.title = title;
     }
+
+	public double getCurrentPosition() {
+		return currentPosition;
+	}
+
+	public void setCurrentPosition(double currentPosition) {
+		this.currentPosition = currentPosition;
+	}
 }

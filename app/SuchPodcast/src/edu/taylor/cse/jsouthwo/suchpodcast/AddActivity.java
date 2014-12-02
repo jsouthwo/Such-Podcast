@@ -92,6 +92,7 @@ public class AddActivity extends ActionBarActivity {
 					intent.putExtra("episodeName", episodeToPlay.getTitle());
 					intent.putExtra("episodeDescription", episodeToPlay.getDescription());
 					intent.putExtra("episodeLocalDirName", episodeToPlay.getLocalDirName());
+//					intent.putExtra("episodePosition", position);
 //					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
 					startActivity( intent );
 				} else {
