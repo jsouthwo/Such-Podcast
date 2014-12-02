@@ -22,7 +22,7 @@ public class RssItem {
 	public static final String OTHER = "OTHER";
 
 	private int id;
-    private String title;
+	private String title;
     private String description;
     private String url;
     private String filename;
@@ -31,68 +31,72 @@ public class RssItem {
     private String link;
     private String imageUrl;
     private String localDirName;
+    private double currentPosition = 0;
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getLocalDirName() {
-    	return localDirName;
-    }
-
-    public void setLocalDirName(String name) {
-    	localDirName = name;
-    }
-
-	public String getFilename() {
-		return filename;
-	}
-
-	public int getId() {
+    public int getId() {
 		return id;
 	}
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
 	public String getCreatedAt() {
 		return createdAt;
 	}
-
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
-
 	public String getPodcast() {
 		return podcast;
 	}
-
 	public void setPodcast(String podcast) {
 		this.podcast = podcast;
+	}
+	public String getLink() {
+		return link;
+	}
+	public void setLink(String link) {
+		this.link = link;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+	public String getLocalDirName() {
+		return localDirName;
+	}
+	public void setLocalDirName(String localDirName) {
+		this.localDirName = localDirName;
+	}
+	public double getCurrentPosition() {
+		return currentPosition;
+	}
+	public void setCurrentPosition(double currentPosition) {
+		this.currentPosition = currentPosition;
 	}
 }
