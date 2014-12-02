@@ -84,11 +84,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.e("DB", "Calling onCreate");
+//        Log.i("DB", "Calling onCreate");
         db.execSQL(CREATE_TABLE_PODCAST);
         db.execSQL(CREATE_TABLE_EPISODE);
-        Log.e("DB", CREATE_TABLE_PODCAST);
-        Log.e("DB", CREATE_TABLE_EPISODE);
+//        Log.i("DB", CREATE_TABLE_PODCAST);
+//        Log.i("DB", CREATE_TABLE_EPISODE);
     }
  
     @Override
@@ -153,7 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_PODCAST + " WHERE "
                 + KEY_ID + " = " + podcast_id;
 
-        Log.e(LOG, selectQuery);
+        Log.i(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -178,7 +178,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_EPISODE + " WHERE "
                 + KEY_ID + " = " + episode_id;
 
-        Log.e(LOG, selectQuery);
+        Log.i(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -201,9 +201,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * */
     public List<Podcast> getAllPodcasts() {
         List<Podcast> podcasts = new ArrayList<Podcast>();
-        String selectQuery = "SELECT * FROM " + TABLE_PODCAST;
+        String selectQuery = "SELECT * FROM " + TABLE_PODCAST + " ORDER BY " + KEY_TITLE;
 
-        Log.e(LOG, selectQuery);
+        Log.i(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -233,7 +233,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         		" WHERE " +
         		KEY_PODCAST + " = " + podcastRssItemName + ";";
 
-        Log.e(LOG, selectQuery);
+        Log.i(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);

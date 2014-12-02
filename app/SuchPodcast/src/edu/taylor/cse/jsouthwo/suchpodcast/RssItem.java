@@ -28,6 +28,9 @@ public class RssItem {
     private String filename;
     private String createdAt;
     private String podcast;
+    private String link;
+    private String imageUrl;
+    private String localDirName;
 
     public String getDescription() {
         return description;
@@ -39,6 +42,14 @@ public class RssItem {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getLocalDirName() {
+    	return localDirName;
+    }
+
+    public void setLocalDirName(String name) {
+    	localDirName = name;
     }
 
 	public String getFilename() {

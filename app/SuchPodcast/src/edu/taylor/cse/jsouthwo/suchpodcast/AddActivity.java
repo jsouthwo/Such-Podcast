@@ -1,3 +1,4 @@
+
 package edu.taylor.cse.jsouthwo.suchpodcast;
 
 import android.support.v7.app.ActionBarActivity;
@@ -29,7 +30,7 @@ public class AddActivity extends ActionBarActivity {
         Button addbutton = (Button)findViewById(R.id.add_button);
         final EditText textBox = (EditText)findViewById(R.id.editText1);
         addbutton.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				createPodcast(textBox.getText().toString()); //Takes the value from the input field and adds a podcast
@@ -43,12 +44,13 @@ public class AddActivity extends ActionBarActivity {
 	 * @param url	the string url that was contained in the text box when the add button was pushed.
 	 */
 	private void createPodcast(String url) {
-	    Intent intent = new Intent(this, PodcastActivity.class);
-
-        PodcastActivity.adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
-		new GetRssFeed().execute(url);
+            Intent intent = new Intent(this, PodcastActivity.class);
+            if ( PodcastActivity.adapter == null ) {
+                    PodcastActivity.adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
+            }
+            new GetRssFeed().execute(url);
 	    startActivity( intent );  
-	    
+
 	}
 	
 	private class GetRssFeed extends AsyncTask<String, Void, Void> {
@@ -64,6 +66,7 @@ public class AddActivity extends ActionBarActivity {
             Podcast newPodcast = new Podcast();					//Creates a Podcast object
             newPodcast.setUrl(params[0]);						//params[0] is the URL passed into the function
             newPodcast.setTitle(rssReader.getChannelTitle());	//Sets the title of the new Podcast object using the RssReader
+
             PodcastActivity.adapter.add(newPodcast.getTitle());			//Adds the title to the listview adapter
             newPodcast.setList(rssReader.getItems());			//Populates the newPodcast member list with the podcast episodes
             PodcastActivity.podcastList.add(newPodcast);						//Adds newPodcast to the podcastList
@@ -79,6 +82,10 @@ public class AddActivity extends ActionBarActivity {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        PodcastActivity.adapter.clear();
+        for ( Podcast eachPodcast : PodcastActivity.podcastList ) {
+        	PodcastActivity.adapter.add(eachPodcast.getTitle());
+        }
         PodcastActivity.adapter.notifyDataSetChanged();
         PodcastActivity.mList.setAdapter(PodcastActivity.adapter);
         PodcastActivity.mList.setOnItemClickListener(new AdapterView.OnItemClickListener () {
@@ -90,20 +97,38 @@ public class AddActivity extends ActionBarActivity {
 			 */
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				PodcastActivity.adapter.clear();
-				int counter = 0;
-				for (RssItem episode : PodcastActivity.podcastList.get(position).getEpisodeList()) {	//Loops through the episode list and
-					PodcastActivity.adapter.add(episode.getTitle());
-					counter += 1;
-					if ( counter > 4 )
-						break;
+/** TODO: MERGE **/
+				if ( PodcastActivity.inEpisodeDisplay ) {
+					RssItem episodeToPlay = PodcastActivity.currentDisplayedPodcast.getEpisodeList().get(position);
+					Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
+					intent.putExtra("episodeName", episodeToPlay.getTitle());
+					intent.putExtra("episodeDescription", episodeToPlay.getDescription());
+					intent.putExtra("episodeLocalDirName", episodeToPlay.getLocalDirName());
+//					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
+					startActivity( intent );
+				} else {
+					showEpisodes(position);
+					PodcastActivity.inEpisodeDisplay = true;
+/* TODO: MERGE */
 				}
 				PodcastActivity.adapter.notifyDataSetChanged();
 			}
-        	
+
         });
     }
 }
+
+	public void showEpisodes(int position) {
+		PodcastActivity.adapter.clear();
+		PodcastActivity.currentDisplayedPodcast = PodcastActivity.podcastList.get(position);
+		int counter = 0;
+		for (RssItem episode : PodcastActivity.podcastList.get(position).getEpisodeList()) {	//Loops through the episode list and
+			PodcastActivity.adapter.add(episode.getTitle());
+			counter += 1;
+			if ( counter > 4 )
+				break;
+		}
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -124,3 +149,4 @@ public class AddActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 }
+
