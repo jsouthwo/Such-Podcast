@@ -2,15 +2,14 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
 
 import java.util.concurrent.TimeUnit;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -32,8 +31,7 @@ public class AudioPlayerActivity extends Activity {
 	private SeekBar seekbar;
 	private ImageButton playButton,pauseButton;
 	public static int oneTimeOnly = 0;
-	private String episodeTitle,episodeDescription, episodeLocalDirName;
-	//private RssItem currentEpisode = PodcastActivity.currentDisplayedPodcast.getEpisodeList().get(getIntent().getExtras().getInt("episodePosition"));
+	private String episodeTitle, episodeDescription;
     private static DatabaseHelper helper;
     private static SQLiteDatabase db;
 
@@ -43,13 +41,12 @@ public class AudioPlayerActivity extends Activity {
 		setContentView(R.layout.activity_audio_player);
 
 		episodeTitle = getIntent().getExtras().getString("episodeTitle");
-		episodeDescription = getIntent().getExtras().getString("episodeDescription");
-		episodeLocalDirName = getIntent().getExtras().getString("episodeLocalDirName");
 
 		helper = DatabaseHelper.getHelper(getApplicationContext());
 		db = helper.getWritableDatabase();
 
 		RssItem episode = helper.getEpisode(episodeTitle);
+		episodeDescription = episode.getDescription();
 		
 		//VIEWS
 		songName = (TextView)findViewById(R.id.textView4);
@@ -64,16 +61,7 @@ public class AudioPlayerActivity extends Activity {
 		songName.setText(episodeTitle);
 		episodeDescriptionBox.setText(episodeDescription);
 		
-		try {
-			Log.d("JUSTIN", episode.toString());
-			Log.d("JUSTIN", episode.getLocalDirName());
-//			Log.d("JUSTIN", episode.getFilename());
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-//		mediaPlayer = MediaPlayer.create(this, Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/" + episodeLocalDirName));
 		mediaPlayer = MediaPlayer.create(this, Uri.parse(episode.getFilename()));
-		if (mediaPlayer == null) Log.d("JUSTIN", "Null player");
 		seekbar.setClickable(false);
 		pauseButton.setEnabled(false);
 		songName.setSelected(true);

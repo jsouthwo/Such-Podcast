@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,24 +59,11 @@ public class PodcastActivity extends ActionBarActivity {
 					int position, long id) {
 				
 				if ( inEpisodeDisplay ) {
-//					Global.determinePodcastShortName(PodcastActivity.currentDisplayedPodcast.getTitle());
-//					Log.d("JUSTIN", "Episode 1");
-//					String title = (String) view.getTag(position);
-//					
-//					Log.d("JUSTIN", "Title: " + title);
-					
 					String episodeTitle = (String) mList.getItemAtPosition(position);
-					
-//					Log.d("JUSTIN", "episodeTitle: " + episodeTitle);
 					RssItem episodeToPlay = helper.getEpisode(episodeTitle);
-//					Log.d("JUSTIN", "episode: " + episodeToPlay.toString());
-//					Log.d("JUSTIN", "title: " + episodeToPlay.getTitle());
 
 					Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
 					intent.putExtra("episodeTitle", episodeToPlay.getTitle());
-					intent.putExtra("episodeDescription", episodeToPlay.getDescription());
-					intent.putExtra("episodeLocalDirName", episodeToPlay.getLocalDirName());
-					Log.d("JUSTIN", "Local dir name: " + episodeToPlay.getLocalDirName());
 					startActivity( intent );
 				} else {
 					showEpisodes(position);
@@ -86,19 +72,15 @@ public class PodcastActivity extends ActionBarActivity {
 			}
 
 			public void showEpisodes(int position) {
-//				Log.d("JUSTIN", "Showing episodes");
 				PodcastActivity.adapter.clear();
 				PodcastActivity.currentDisplayedPodcast = PodcastActivity.podcasts.get(position);
-//				Log.d("JUSTIN", "Podcast: " + currentDisplayedPodcast.getTitle());
 				int counter = 0;
 				for (RssItem episode : helper.getEpisodes(Global.determinePodcastShortName(currentDisplayedPodcast.getTitle()))) {
-//					Log.d("JUSTIN", "episode title: " + episode.getTitle());
 					PodcastActivity.adapter.add(episode.getTitle());
 					counter += 1;
 					if ( counter > 4 )
 						break;
 				}
-//				Log.d("JUSTIN", "Done");
 			}
         });
 
