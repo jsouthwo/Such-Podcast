@@ -2,7 +2,6 @@ package edu.taylor.cse.jsouthwo.suchpodcast;
 
 import java.util.List;
 
-import android.support.v7.app.ActionBarActivity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,13 +42,9 @@ public class PodcastActivity extends ActionBarActivity {
         podcasts = helper.getAllPodcasts();
         for (Podcast podcast : podcasts) {
         	if (podcast != null){
-        		Log.d("JUSTIN", "loop: " + podcast.getTitle());
         		adapter.add(podcast.getTitle());			//Adds the title to the listview adapter
         	}
         }
-//		adapter.notifyDataSetChanged();
-        Log.d("JUSTIN", "Post");
-        Log.d("JUSTIN", "");
 
         mList = (ListView) findViewById(R.id.list);
         mList.setAdapter(adapter);

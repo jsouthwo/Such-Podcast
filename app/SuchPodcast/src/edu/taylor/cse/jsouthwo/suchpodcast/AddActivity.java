@@ -61,18 +61,13 @@ public class AddActivity extends ActionBarActivity {
 	     */
 	    protected Void doInBackground(String... params) {
 	        try {
-	        	Log.d("TOAST", "1");
-
 	            RssReader rssReader = new RssReader(params[0]);		//Creates an RssReader using the url
 	            Podcast newPodcast = new Podcast();					//Creates a Podcast object
 	        	newPodcast.setUrl(params[0]);						//params[0] is the URL passed into the function
 	            newPodcast.setTitle(rssReader.getChannelTitle());	//Sets the title of the new Podcast object using the RssReader
-	        	
+
 	            helper.createPodcast(newPodcast);
-//	            PodcastActivity.adapter.notifyDataSetChanged();
 	            Log.d(DatabaseHelper.LOG, "Creating podcast: " + newPodcast.getTitle());
-//	            PodcastActivity.adapter.clear();
-	            Log.d("TOAST", "2");
 
 	        } catch (Exception e) {
 	            Log.e("Error Parsing Data (add)", e + "");
@@ -84,22 +79,14 @@ public class AddActivity extends ActionBarActivity {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-            Log.d("TOAST", "4");
-            PodcastActivity.adapter.clear();
+
+			PodcastActivity.adapter.clear();
             PodcastActivity.podcasts = helper.getAllPodcasts();
             for (Podcast podcast : PodcastActivity.podcasts) {
             	if (podcast != null){
-    	            Log.d("TOAST", "3");
-
             		PodcastActivity.adapter.add(podcast.getTitle());			//Adds the title to the listview adapter
             	}
             }
-            Log.d("TOAST", "5");
-
-            PodcastActivity.adapter.notifyDataSetChanged();
-            PodcastActivity.mList.setAdapter(PodcastActivity.adapter);
-            PodcastActivity.mList.refreshDrawableState();
-            Log.d("TOAST", "6");
 		}
 	}
 
