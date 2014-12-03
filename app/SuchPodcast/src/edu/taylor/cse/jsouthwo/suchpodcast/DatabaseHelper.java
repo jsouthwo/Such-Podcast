@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_EPISODE = "Episode";
 
     // Common column names
-    private static final String KEY_ID = "_id";
+    private static final String KEY_ID = "id";
     private static final String KEY_TITLE = "title";
     private static final String KEY_URL = "url";
 
@@ -49,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // PODCAST table create statement
     private static final String CREATE_TABLE_PODCAST = "CREATE TABLE " + TABLE_PODCAST +
     		" (" +
-	    		KEY_ID + " INTEGER PRIMARY_KEY, " +
+	    		KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
 	    		KEY_URL + " TEXT, " +
 	    		KEY_TITLE + " TEXT" +
 //	    		KEY_CREATED_AT + " DATETIME, " + 
@@ -59,7 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // EPISODE table create statement
     private static final String CREATE_TABLE_EPISODE = "CREATE TABLE " + TABLE_EPISODE +
     		" (" +
-	    		KEY_ID + " INTEGER PRIMARY_KEY, " +
+	    		KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
 	    		KEY_URL + " TEXT, " +
 	    		KEY_TITLE + " TEXT, " +
 	    		KEY_CREATED_AT + " DATETIME, " + 
@@ -113,13 +113,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // insert row
         long podcast_id = db.insert(TABLE_PODCAST, null, values);
 
-        /* Keep in case you need it later.
-        // assigning tags to todo
-        for (long tag_id : tag_ids) {
-            createTodoTag(todo_id, tag_id);
-        }
-        */
-
         return podcast_id;
     }
 
@@ -130,7 +123,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, episode.getId());
 		values.put(KEY_URL, episode.getUrl());
 		values.put(KEY_TITLE, episode.getTitle());
 		values.put(KEY_CREATED_AT, episode.getCreatedAt());
@@ -168,15 +160,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return podcast;
     }
-
     /*
      * get single Episode (RssItem)
      */
-    public RssItem getEpisode(long episode_id) {
+    public RssItem getEpisode(String title) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT * FROM " + TABLE_EPISODE + " WHERE "
-                + KEY_ID + " = " + episode_id;
+                + KEY_TITLE + " = '" + title + "' LIMIT 1;";
 
         Log.i(LOG, selectQuery);
 
@@ -186,7 +177,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             c.moveToFirst();
 
         RssItem episode = new RssItem();
-        episode.setCreatedAt(c.getString(c.getColumnIndex(KEY_ID)));
+        episode.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+        episode.setDescription(c.getString(c.getColumnIndex(KEY_DESCRIPTION)));
+        episode.setFilename(c.getString(c.getColumnIndex(KEY_FILENAME)));
+        episode.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        episode.setUrl(c.getString(c.getColumnIndex(KEY_URL)));
+        episode.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
+
+        return episode;
+    }
+
+    /*
+     * get single Episode (RssItem)
+     */
+    public RssItem getEpisode(long episode_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_EPISODE + " WHERE "
+                + KEY_ID + " = '" + episode_id + "';";
+
+        Log.i(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        RssItem episode = new RssItem();
+        episode.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
         episode.setDescription(c.getString(c.getColumnIndex(KEY_DESCRIPTION)));
         episode.setFilename(c.getString(c.getColumnIndex(KEY_FILENAME)));
         episode.setId(c.getInt(c.getColumnIndex(KEY_ID)));
@@ -234,7 +252,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<RssItem> episodes = new ArrayList<RssItem>();
         String selectQuery = "SELECT * FROM " + TABLE_EPISODE + 
         		" WHERE " +
-        		KEY_PODCAST + " = " + podcastRssItemName + ";";
+        		KEY_PODCAST + " = '" + podcastRssItemName + "';";
 
         Log.i(LOG, selectQuery);
 

@@ -6,6 +6,13 @@ public class Podcast {
 	private String url;
 	private String title;
 	
+	public Podcast(String u, String t){
+		url = u;
+		title = t;
+	}
+
+	public Podcast(){}
+	
 	public void setTitle(String newTitle) {
 		title = newTitle;
 	}

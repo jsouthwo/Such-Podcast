@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,55 +49,58 @@ public class PodcastActivity extends ActionBarActivity {
 
         mList = (ListView) findViewById(R.id.list);
         mList.setAdapter(adapter);
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        	@Override
-        	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-        		Toast.makeText(getApplicationContext(), "Clicked position " + position, Toast.LENGTH_SHORT).show();
-        	}
-		});
-//        mList.setOnItemClickListener(new AdapterView.OnItemClickListener () {
-//
-//			@Override
-//			/**
-//			 * This function describes what the application should do in the event that a user clicks on a list item in the
-//			 * listview. 
-//			 */
-//			public void onItemClick(AdapterView<?> parent, View view,
-//					int position, long id) {
-///** TODO: MERGE **/
-//				if ( inEpisodeDisplay ) {
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener () {
+
+			@Override
+			/**
+			 * This function describes what the application should do in the event that a user clicks on a list item in the
+			 * listview. 
+			 */
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				
+				if ( inEpisodeDisplay ) {
 //					Global.determinePodcastShortName(PodcastActivity.currentDisplayedPodcast.getTitle());
+//					Log.d("JUSTIN", "Episode 1");
 //					String title = (String) view.getTag(position);
-//					Log.d("DBDBDB", title);
-//
-////					RssItem episodeToPlay = PodcastActivity.currentDisplayedPodcast.getEpisodeList().get(position);
-//					Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
-////					intent.putExtra("episodeName", episodeToPlay.getTitle());
-////					intent.putExtra("episodeDescription", episodeToPlay.getDescription());
-////					intent.putExtra("episodeLocalDirName", episodeToPlay.getLocalDirName());
-//////					intent.putExtra("episodePosition", position);
-//////					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
-//					startActivity( intent );
-//				} else {
-//					showEpisodes(position);
-//					PodcastActivity.inEpisodeDisplay = true;
-///* TODO: MERGE */
-//				}
-//				PodcastActivity.adapter.notifyDataSetChanged();
-//			}
-//
-//			public void showEpisodes(int position) {
-//				PodcastActivity.adapter.clear();
-//				PodcastActivity.currentDisplayedPodcast = PodcastActivity.podcasts.get(position);
-//				int counter = 0;
-//				for (RssItem episode : helper.getEpisodes(Global.determinePodcastShortName(currentDisplayedPodcast.getTitle()))) {
-//					PodcastActivity.adapter.add(episode.getTitle());
-//					counter += 1;
-//					if ( counter > 4 )
-//						break;
-//				}
-//			}
-//        });
+//					
+//					Log.d("JUSTIN", "Title: " + title);
+					
+					String episodeTitle = (String) mList.getItemAtPosition(position);
+					
+//					Log.d("JUSTIN", "episodeTitle: " + episodeTitle);
+					RssItem episodeToPlay = helper.getEpisode(episodeTitle);
+//					Log.d("JUSTIN", "episode: " + episodeToPlay.toString());
+//					Log.d("JUSTIN", "title: " + episodeToPlay.getTitle());
+
+					Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
+					intent.putExtra("episodeTitle", episodeToPlay.getTitle());
+					intent.putExtra("episodeDescription", episodeToPlay.getDescription());
+					intent.putExtra("episodeLocalDirName", episodeToPlay.getLocalDirName());
+					Log.d("JUSTIN", "Local dir name: " + episodeToPlay.getLocalDirName());
+					startActivity( intent );
+				} else {
+					showEpisodes(position);
+					PodcastActivity.inEpisodeDisplay = true;
+				}
+			}
+
+			public void showEpisodes(int position) {
+//				Log.d("JUSTIN", "Showing episodes");
+				PodcastActivity.adapter.clear();
+				PodcastActivity.currentDisplayedPodcast = PodcastActivity.podcasts.get(position);
+//				Log.d("JUSTIN", "Podcast: " + currentDisplayedPodcast.getTitle());
+				int counter = 0;
+				for (RssItem episode : helper.getEpisodes(Global.determinePodcastShortName(currentDisplayedPodcast.getTitle()))) {
+//					Log.d("JUSTIN", "episode title: " + episode.getTitle());
+					PodcastActivity.adapter.add(episode.getTitle());
+					counter += 1;
+					if ( counter > 4 )
+						break;
+				}
+//				Log.d("JUSTIN", "Done");
+			}
+        });
 
         ImageButton addLink = (ImageButton)findViewById(R.id.add_link);
         addLink.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +130,7 @@ public class PodcastActivity extends ActionBarActivity {
 			episodeCounter = 0;
 			String name = Global.determinePodcastShortName(podcast.getTitle());
 			for ( RssItem episode : helper.getEpisodes(name)) {
-				if ( episodeCounter == 5 ) {
+				if ( episodeCounter >= 5 ) {
 					break;
 				}
 				String url = episode.getUrl();
@@ -142,20 +146,17 @@ public class PodcastActivity extends ActionBarActivity {
 							"Your Android version is incompatible.", Toast.LENGTH_LONG).show();
 					return;
 				}
-				String[] title = episode.getTitle().split("\\s+");
-				StringBuilder sb = new StringBuilder();
-//				for  ( int i = 0; i < title.length || i == 2; i++ ) {
-//					sb.append(title[i]);
-//				}
-				sb.append(title[0]);
-				episode.setLocalDirName(sb.toString() + ".mp3");
-				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, episode.getLocalDirName());
+				String title = episode.getTitle();
 
+				episode.setLocalDirName(title + ".mp3");
+				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, episode.getLocalDirName());
+				episode.setFilename(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/" + episode.getLocalDirName());
 				// get download service and enqueue file
 				DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 				manager.enqueue(request);
 				episodeCounter++;
-			}
+				helper.updateEpisode(episode);
+;			}
 		}
 	}
 

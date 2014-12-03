@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -31,17 +32,24 @@ public class AudioPlayerActivity extends Activity {
 	private SeekBar seekbar;
 	private ImageButton playButton,pauseButton;
 	public static int oneTimeOnly = 0;
-	private String episodeName,episodeDescription, episodeLocalDirName;
+	private String episodeTitle,episodeDescription, episodeLocalDirName;
 	//private RssItem currentEpisode = PodcastActivity.currentDisplayedPodcast.getEpisodeList().get(getIntent().getExtras().getInt("episodePosition"));
-	
+    private static DatabaseHelper helper;
+    private static SQLiteDatabase db;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		episodeName = getIntent().getExtras().getString("episodeName");
+		setContentView(R.layout.activity_audio_player);
+
+		episodeTitle = getIntent().getExtras().getString("episodeTitle");
 		episodeDescription = getIntent().getExtras().getString("episodeDescription");
 		episodeLocalDirName = getIntent().getExtras().getString("episodeLocalDirName");
-		
-		setContentView(R.layout.activity_audio_player);
+
+		helper = DatabaseHelper.getHelper(getApplicationContext());
+		db = helper.getWritableDatabase();
+
+		RssItem episode = helper.getEpisode(episodeTitle);
 		
 		//VIEWS
 		songName = (TextView)findViewById(R.id.textView4);
@@ -53,15 +61,26 @@ public class AudioPlayerActivity extends Activity {
 		episodeDescriptionBox = (TextView)findViewById(R.id.textView5);
 		
 		//OTHER THINGS
-		songName.setText(episodeName);
+		songName.setText(episodeTitle);
 		episodeDescriptionBox.setText(episodeDescription);
-		mediaPlayer = MediaPlayer.create(this, Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/" + episodeLocalDirName));
+		
+		try {
+			Log.d("JUSTIN", episode.toString());
+			Log.d("JUSTIN", episode.getLocalDirName());
+//			Log.d("JUSTIN", episode.getFilename());
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+//		mediaPlayer = MediaPlayer.create(this, Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/" + episodeLocalDirName));
+		mediaPlayer = MediaPlayer.create(this, Uri.parse(episode.getFilename()));
+		if (mediaPlayer == null) Log.d("JUSTIN", "Null player");
 		seekbar.setClickable(false);
 		pauseButton.setEnabled(false);
 		songName.setSelected(true);
 	}
 
-	@TargetApi(Build.VERSION_CODES.GINGERBREAD) public void play(View view){
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+	public void play(View view){
 		mediaPlayer.start();
 //		if ( firstStart ) {
 //			mediaPlayer.seekTo((int)currentEpisode.getCurrentPosition());
