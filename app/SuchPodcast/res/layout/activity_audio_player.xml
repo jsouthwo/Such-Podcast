@@ -106,4 +106,33 @@
        android:text="Description: "
        android:textAppearance="?android:attr/textAppearanceMedium" />
 
+   <Button
+       android:id="@+id/saveButton"
+       android:layout_width="64dp"
+       android:layout_height="64dp"
+       android:layout_above="@+id/seekBar1"
+       android:layout_alignLeft="@+id/textView1"
+       android:layout_marginBottom="19dp"
+       android:text="Save"
+       android:textSize="10dp" />
+
+   <Button
+       android:id="@+id/unsaveButton"
+       android:layout_width="64dp"
+       android:layout_height="64dp"
+       android:layout_alignTop="@+id/saveButton"
+       android:layout_centerHorizontal="true"
+       android:text="Unsave"
+       android:textSize="10dp"
+        />
+
+   <Button
+       android:id="@+id/markAsReadButton"
+       android:layout_width="64dp"
+       android:layout_height="64dp"
+       android:layout_alignRight="@+id/textView2"
+       android:layout_alignTop="@+id/unsaveButton"
+       android:text="Mark as Read"
+       android:textSize="10dp" />
+
 </RelativeLayout>
