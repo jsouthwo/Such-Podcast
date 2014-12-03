@@ -1,23 +1,23 @@
 
 package edu.taylor.cse.jsouthwo.suchpodcast;
 
-import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class AddActivity extends ActionBarActivity {
     private static DatabaseHelper helper;
     private static SQLiteDatabase db;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,90 +44,62 @@ public class AddActivity extends ActionBarActivity {
 	 * @param url	the string url that was contained in the text box when the add button was pushed.
 	 */
 	private void createPodcast(String url) {
-            Intent intent = new Intent(this, PodcastActivity.class);
-            if ( PodcastActivity.adapter == null ) {
-                    PodcastActivity.adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
-            }
-            new GetRssFeed().execute(url);
-	    startActivity( intent );  
-
+		Intent intent = new Intent(this, PodcastActivity.class);
+		if ( PodcastActivity.adapter == null ) {
+			PodcastActivity.adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
+		}
+		new GetRssFeed().execute(url);
+		startActivity( intent );
 	}
-	
+
 	private class GetRssFeed extends AsyncTask<String, Void, Void> {
-	
-    @Override
-    /**
-     * This is called when createPodcast calls the GetRssFeed execute method. It creates a new podcast to add to
-     * the podcastList member list.
-     */
-    protected Void doInBackground(String... params) {
-        try {
-            RssReader rssReader = new RssReader(params[0]);		//Creates an RssReader using the url
-            Podcast newPodcast = new Podcast();					//Creates a Podcast object
-            newPodcast.setUrl(params[0]);						//params[0] is the URL passed into the function
-            newPodcast.setTitle(rssReader.getChannelTitle());	//Sets the title of the new Podcast object using the RssReader
 
-            PodcastActivity.adapter.add(newPodcast.getTitle());			//Adds the title to the listview adapter
-            newPodcast.setList(rssReader.getItems());			//Populates the newPodcast member list with the podcast episodes
-            PodcastActivity.podcastList.add(newPodcast);						//Adds newPodcast to the podcastList
-            helper.createPodcast(newPodcast);
-            Log.v(DatabaseHelper.LOG, "Creating podcast");
+	    @Override
+	    /**
+	     * This is called when createPodcast calls the GetRssFeed execute method. It creates a new podcast to add to
+	     * the podcastList member list.
+	     */
+	    protected Void doInBackground(String... params) {
+	        try {
+	        	Log.d("TOAST", "1");
 
-        } catch (Exception e) {
-            Log.v("Error Parsing Data", e + "");
-        }
-        return null;
-    }
+	            RssReader rssReader = new RssReader(params[0]);		//Creates an RssReader using the url
+	            Podcast newPodcast = new Podcast();					//Creates a Podcast object
+	        	newPodcast.setUrl(params[0]);						//params[0] is the URL passed into the function
+	            newPodcast.setTitle(rssReader.getChannelTitle());	//Sets the title of the new Podcast object using the RssReader
+	        	
+	            helper.createPodcast(newPodcast);
+//	            PodcastActivity.adapter.notifyDataSetChanged();
+	            Log.d(DatabaseHelper.LOG, "Creating podcast: " + newPodcast.getTitle());
+//	            PodcastActivity.adapter.clear();
+	            Log.d("TOAST", "2");
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        PodcastActivity.adapter.clear();
-        for ( Podcast eachPodcast : PodcastActivity.podcastList ) {
-        	PodcastActivity.adapter.add(eachPodcast.getTitle());
-        }
-        PodcastActivity.adapter.notifyDataSetChanged();
-        PodcastActivity.mList.setAdapter(PodcastActivity.adapter);
-        PodcastActivity.mList.setOnItemClickListener(new AdapterView.OnItemClickListener () {
+	        } catch (Exception e) {
+	            Log.e("Error Parsing Data (add)", e + "");
+	            e.printStackTrace();
+	        }
+	        return null;
+	    }
 
-			@Override
-			/**
-			 * This function describes what the application should do in the event that a user clicks on a list item in the
-			 * listview. 
-			 */
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-/** TODO: MERGE **/
-				if ( PodcastActivity.inEpisodeDisplay ) {
-					RssItem episodeToPlay = PodcastActivity.currentDisplayedPodcast.getEpisodeList().get(position);
-					Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
-					intent.putExtra("episodeName", episodeToPlay.getTitle());
-					intent.putExtra("episodeDescription", episodeToPlay.getDescription());
-					intent.putExtra("episodeLocalDirName", episodeToPlay.getLocalDirName());
-//					intent.putExtra("episodePosition", position);
-//					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
-					startActivity( intent );
-				} else {
-					showEpisodes(position);
-					PodcastActivity.inEpisodeDisplay = true;
-/* TODO: MERGE */
-				}
-				PodcastActivity.adapter.notifyDataSetChanged();
-			}
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+            Log.d("TOAST", "4");
+            PodcastActivity.adapter.clear();
+            PodcastActivity.podcasts = helper.getAllPodcasts();
+            for (Podcast podcast : PodcastActivity.podcasts) {
+            	if (podcast != null){
+    	            Log.d("TOAST", "3");
 
-        });
-    }
-}
+            		PodcastActivity.adapter.add(podcast.getTitle());			//Adds the title to the listview adapter
+            	}
+            }
+            Log.d("TOAST", "5");
 
-	public void showEpisodes(int position) {
-		PodcastActivity.adapter.clear();
-		PodcastActivity.currentDisplayedPodcast = PodcastActivity.podcastList.get(position);
-		int counter = 0;
-		for (RssItem episode : PodcastActivity.podcastList.get(position).getEpisodeList()) {	//Loops through the episode list and
-			PodcastActivity.adapter.add(episode.getTitle());
-			counter += 1;
-			if ( counter > 4 )
-				break;
+            PodcastActivity.adapter.notifyDataSetChanged();
+            PodcastActivity.mList.setAdapter(PodcastActivity.adapter);
+            PodcastActivity.mList.refreshDrawableState();
+            Log.d("TOAST", "6");
 		}
 	}
 

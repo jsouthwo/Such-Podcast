@@ -201,8 +201,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * */
     public List<Podcast> getAllPodcasts() {
         List<Podcast> podcasts = new ArrayList<Podcast>();
-        String selectQuery = "SELECT * FROM " + TABLE_PODCAST + " ORDER BY " + KEY_TITLE;
+        String selectQuery = "SELECT * FROM " + TABLE_PODCAST + " ORDER BY " + KEY_TITLE + ";";
 
+//        String selectQuery = "SELECT * FROM " + TABLE_PODCAST + ";";
         Log.i(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -218,7 +219,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 // adding to podcast list
                 podcasts.add(podcast);
-            } while (c.moveToNext());
+//                Log.d("POD", podcast.getTitle());
+//                Log.d("POD", podcast.getUrl());
+                } while (c.moveToNext());
         }
 
         return podcasts;

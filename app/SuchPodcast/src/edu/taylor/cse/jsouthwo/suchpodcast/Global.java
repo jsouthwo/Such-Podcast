@@ -13,4 +13,16 @@ public class Global extends Application {
 	public static Context getContext() {
 		return instance;
 	}
+
+    /** VERY IMPORTANT **/
+    public static String determinePodcastShortName(String title){
+    	if (title.contains("ience")){
+    		return RssItem.SCIFRI;
+    	} else if (title.contains("nswer")){
+    		return RssItem.BAM;
+    	} else {
+    		return RssItem.OTHER;
+    	}
+    }
+
 }

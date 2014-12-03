@@ -1,6 +1,7 @@
 package edu.taylor.cse.jsouthwo.suchpodcast;
 
-import java.util.ArrayList;
+import java.util.List;
+
 import android.support.v7.app.ActionBarActivity;
 import android.app.DownloadManager;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -22,7 +24,7 @@ import android.widget.Toast;
 public class PodcastActivity extends ActionBarActivity {
 	public static ListView mList;
     public static ArrayAdapter<String> adapter;
-    public static ArrayList<Podcast> podcastList = new ArrayList<Podcast>();
+    public static List<Podcast> podcasts;
     public static boolean inEpisodeDisplay = false;
     public static Podcast currentDisplayedPodcast;
     private static DatabaseHelper helper;
@@ -36,15 +38,77 @@ public class PodcastActivity extends ActionBarActivity {
         helper = DatabaseHelper.getHelper(getApplicationContext());
         db = helper.getWritableDatabase();
 
-        mList = (ListView) findViewById(R.id.list);
         adapter = new ArrayAdapter<String>(this, R.layout.basic_list_item);
+        adapter.clear();
+        podcasts = helper.getAllPodcasts();
+        for (Podcast podcast : podcasts) {
+        	if (podcast != null){
+        		Log.d("JUSTIN", "loop: " + podcast.getTitle());
+        		adapter.add(podcast.getTitle());			//Adds the title to the listview adapter
+        	}
+        }
+//		adapter.notifyDataSetChanged();
+        Log.d("JUSTIN", "Post");
+        Log.d("JUSTIN", "");
+
+        mList = (ListView) findViewById(R.id.list);
+        mList.setAdapter(adapter);
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        	@Override
+        	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+        		Toast.makeText(getApplicationContext(), "Clicked position " + position, Toast.LENGTH_SHORT).show();
+        	}
+		});
+//        mList.setOnItemClickListener(new AdapterView.OnItemClickListener () {
+//
+//			@Override
+//			/**
+//			 * This function describes what the application should do in the event that a user clicks on a list item in the
+//			 * listview. 
+//			 */
+//			public void onItemClick(AdapterView<?> parent, View view,
+//					int position, long id) {
+///** TODO: MERGE **/
+//				if ( inEpisodeDisplay ) {
+//					Global.determinePodcastShortName(PodcastActivity.currentDisplayedPodcast.getTitle());
+//					String title = (String) view.getTag(position);
+//					Log.d("DBDBDB", title);
+//
+////					RssItem episodeToPlay = PodcastActivity.currentDisplayedPodcast.getEpisodeList().get(position);
+//					Intent intent = new Intent(getApplicationContext(), AudioPlayerActivity.class);
+////					intent.putExtra("episodeName", episodeToPlay.getTitle());
+////					intent.putExtra("episodeDescription", episodeToPlay.getDescription());
+////					intent.putExtra("episodeLocalDirName", episodeToPlay.getLocalDirName());
+//////					intent.putExtra("episodePosition", position);
+//////					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
+//					startActivity( intent );
+//				} else {
+//					showEpisodes(position);
+//					PodcastActivity.inEpisodeDisplay = true;
+///* TODO: MERGE */
+//				}
+//				PodcastActivity.adapter.notifyDataSetChanged();
+//			}
+//
+//			public void showEpisodes(int position) {
+//				PodcastActivity.adapter.clear();
+//				PodcastActivity.currentDisplayedPodcast = PodcastActivity.podcasts.get(position);
+//				int counter = 0;
+//				for (RssItem episode : helper.getEpisodes(Global.determinePodcastShortName(currentDisplayedPodcast.getTitle()))) {
+//					PodcastActivity.adapter.add(episode.getTitle());
+//					counter += 1;
+//					if ( counter > 4 )
+//						break;
+//				}
+//			}
+//        });
 
         ImageButton addLink = (ImageButton)findViewById(R.id.add_link);
         addLink.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-			    Intent intent = new Intent(getApplicationContext(), AddActivity.class);
-			    startActivity( intent );
+				Intent intent = new Intent(getApplicationContext(), AddActivity.class);
+				startActivity( intent );
 			}
 		});
 
@@ -62,17 +126,18 @@ public class PodcastActivity extends ActionBarActivity {
 	}
 
 	public void performDownloads() {
-		int episodeCounter = 0;
-		for ( Podcast eachPodcast : podcastList ) {
+		int episodeCounter;
+		for ( Podcast podcast : podcasts ) {
 			episodeCounter = 0;
-			for ( RssItem eachEpisode : eachPodcast.getEpisodeList() ) {
+			String name = Global.determinePodcastShortName(podcast.getTitle());
+			for ( RssItem episode : helper.getEpisodes(name)) {
 				if ( episodeCounter == 5 ) {
 					break;
 				}
-				String url = eachEpisode.getUrl();
+				String url = episode.getUrl();
 				DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-				request.setDescription(eachEpisode.getDescription());
-				request.setTitle(eachEpisode.getTitle());
+				request.setDescription(episode.getDescription());
+				request.setTitle(episode.getTitle());
 				// in order for this if to run, you must use the android 3.2 to compile your app
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 				    request.allowScanningByMediaScanner();
@@ -82,14 +147,14 @@ public class PodcastActivity extends ActionBarActivity {
 							"Your Android version is incompatible.", Toast.LENGTH_LONG).show();
 					return;
 				}
-				String[] title = eachEpisode.getTitle().split("\\s+");
+				String[] title = episode.getTitle().split("\\s+");
 				StringBuilder sb = new StringBuilder();
 //				for  ( int i = 0; i < title.length || i == 2; i++ ) {
 //					sb.append(title[i]);
 //				}
 				sb.append(title[0]);
-				eachEpisode.setLocalDirName(sb.toString() + ".mp3");
-				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, eachEpisode.getLocalDirName());
+				episode.setLocalDirName(sb.toString() + ".mp3");
+				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, episode.getLocalDirName());
 
 				// get download service and enqueue file
 				DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
