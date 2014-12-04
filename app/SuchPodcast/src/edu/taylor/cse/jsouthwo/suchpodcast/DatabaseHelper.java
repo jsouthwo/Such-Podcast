@@ -66,8 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    		KEY_FILENAME + " TEXT, " +
 	    		KEY_DESCRIPTION + " TEXT, " +
 	    		KEY_PODCAST + " TEXT, " +
-	    		KEY_POSITION + " REAL, " +
-	    		KEY_PLAYED + " INTEGER" +
+	    		KEY_PLAYED + " INTEGER, " +
+	    		KEY_POSITION + " FLOAT" +
     		");";
 
     public static DatabaseHelper getHelper(Context context) {

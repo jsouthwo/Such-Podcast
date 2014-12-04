@@ -141,6 +141,8 @@ public class AudioPlayerActivity extends Activity {
 	private Runnable UpdateSongTime = new Runnable() {
 		@TargetApi(Build.VERSION_CODES.GINGERBREAD) public void run() {
 			startTime = mediaPlayer.getCurrentPosition();
+			episode.setCurrentPosition(mediaPlayer.getCurrentPosition());
+			helper.updateEpisode(episode);
 			startTimeField.setText(String.format("%02d:%02d", 
 					TimeUnit.MILLISECONDS.toMinutes((long) startTime),
 					TimeUnit.MILLISECONDS.toSeconds((long) startTime) - 
