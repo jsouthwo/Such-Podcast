@@ -87,6 +87,7 @@ public class AddActivity extends ActionBarActivity {
             		PodcastActivity.adapter.add(podcast.getTitle());			//Adds the title to the listview adapter
             	}
             }
+
 		}
 	}
 

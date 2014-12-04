@@ -31,7 +31,7 @@ public class RssItem {
     private String link;
     private String imageUrl;
     private String localDirName;
-    private double currentPosition = 0;
+    private float currentPosition = 0;
 
     public int getId() {
 		return id;
@@ -93,10 +93,10 @@ public class RssItem {
 	public void setLocalDirName(String localDirName) {
 		this.localDirName = localDirName;
 	}
-	public double getCurrentPosition() {
+	public float getCurrentPosition() {
 		return currentPosition;
 	}
-	public void setCurrentPosition(double currentPosition) {
+	public void setCurrentPosition(float currentPosition) {
 		this.currentPosition = currentPosition;
 	}
 }

@@ -19,61 +19,16 @@
       android:src="@android:drawable/ic_media_rew"
       android:contentDescription="rewind" />
 
-   <ImageButton
-      android:id="@+id/imageButton4"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:layout_alignTop="@+id/imageButton2"
-      android:layout_marginLeft="22dp"
-      android:layout_toRightOf="@+id/imageButton2"
-      android:onClick="forward"
-      android:src="@android:drawable/ic_media_ff"
-      android:contentDescription="fast-forward" />
-
-   <ImageButton
-      android:id="@+id/imageButton2"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignTop="@+id/imageButton1"
-      android:layout_marginLeft="14dp"
-      android:layout_toRightOf="@+id/imageButton1"
-      android:onClick="pause"
-      android:src="@android:drawable/ic_media_pause"
-      android:contentDescription="pause" />
-
-   <ImageButton
-      android:id="@+id/imageButton1"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignTop="@+id/imageButton3"
-      android:layout_marginLeft="24dp"
-      android:layout_toRightOf="@+id/imageButton3"
-      android:onClick="play"
-      android:src="@android:drawable/ic_media_play"
-      android:contentDescription="play" />
-
-      <ImageButton
-      android:id="@+id/resumeButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignTop="@+id/imageButton3"
-      android:layout_marginLeft="24dp"
-      android:layout_toRightOf="@+id/imageButton3"
-      android:onClick="resume"
-      android:src="@android:drawable/ic_media_previous"
-      android:contentDescription="resume" />
-
    <SeekBar
       android:id="@+id/seekBar1"
       android:layout_width="match_parent"
       android:layout_height="wrap_content" 
       android:layout_above="@+id/imageButton3"
-      android:layout_toLeftOf="@+id/textView2"
-      android:layout_toRightOf="@+id/textView1" />
+      android:layout_toLeftOf="@+id/end_time"
+      android:layout_toRightOf="@+id/start_time" />
 
    <TextView
-      android:id="@+id/textView1"
+      android:id="@+id/start_time"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignRight="@+id/imageButton3"
@@ -82,7 +37,7 @@
       android:textAppearance="?android:attr/textAppearanceSmall" />
 
    <TextView
-      android:id="@+id/textView2"
+      android:id="@+id/end_time"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/imageButton4"
@@ -99,12 +54,12 @@
       android:textAppearance="?android:attr/textAppearanceMedium" />
 
    <TextView
-       android:id="@+id/textView4"
+       android:id="@+id/title_text"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignBaseline="@+id/textView3"
        android:layout_alignBottom="@+id/textView3"
-       android:layout_toRightOf="@+id/imageButton1"
+       android:layout_toRightOf="@+id/playButton"
        android:ellipsize="marquee"
        android:fadingEdge="horizontal"
        android:marqueeRepeatLimit="marquee_forever"
@@ -112,7 +67,7 @@
        android:singleLine="true" />
 
    <TextView
-       android:id="@+id/textView5"
+       android:id="@+id/description_text"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignLeft="@+id/textView3"
@@ -126,7 +81,7 @@
        android:layout_width="64dp"
        android:layout_height="64dp"
        android:layout_above="@+id/seekBar1"
-       android:layout_alignLeft="@+id/textView1"
+       android:layout_alignLeft="@+id/start_time"
        android:layout_marginBottom="19dp"
        android:text="Save"
        android:textSize="10dp" />
@@ -145,9 +100,49 @@
        android:id="@+id/markAsReadButton"
        android:layout_width="64dp"
        android:layout_height="64dp"
-       android:layout_alignRight="@+id/textView2"
+       android:layout_alignRight="@+id/end_time"
        android:layout_alignTop="@+id/unsaveButton"
        android:text="Mark as Read"
        android:textSize="10dp" />
+
+   <ImageButton
+       android:id="@+id/resumeButton"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/seekBar1"
+       android:layout_toRightOf="@+id/imageButton3"
+       android:contentDescription="resume"
+       android:onClick="play"
+       android:src="@android:drawable/ic_media_previous" />
+
+   <ImageButton
+       android:id="@+id/playButton"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignRight="@+id/unsaveButton"
+       android:layout_below="@+id/seekBar1"
+       android:contentDescription="play"
+       android:onClick="resume"
+       android:src="@android:drawable/ic_media_play" />
+
+   <ImageButton
+       android:id="@+id/imageButton4"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignTop="@+id/pauseButton"
+       android:layout_toRightOf="@+id/pauseButton"
+       android:contentDescription="fast-forward"
+       android:onClick="forward"
+       android:src="@android:drawable/ic_media_ff" />
+
+   <ImageButton
+       android:id="@+id/pauseButton"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignLeft="@+id/title_text"
+       android:layout_below="@+id/seekBar1"
+       android:contentDescription="pause"
+       android:onClick="pause"
+       android:src="@android:drawable/ic_media_pause" />
 
 </RelativeLayout>

@@ -44,6 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_FILENAME = "filename";
     private static final String KEY_CREATED_AT = "created_at";
     private static final String KEY_PODCAST = "podcast";
+    private static final String KEY_POSITION = "current_position";
 
     /** Table Create Statements **/
     // PODCAST table create statement
@@ -65,7 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    		KEY_CREATED_AT + " DATETIME, " + 
 	    		KEY_FILENAME + " TEXT, " +
 	    		KEY_DESCRIPTION + " TEXT, " +
-	    		KEY_PODCAST + " TEXT" +
+	    		KEY_PODCAST + " TEXT, " +
+	    		KEY_POSITION + " REAL" +
     		");";
 
     public static DatabaseHelper getHelper(Context context) {
@@ -129,6 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_FILENAME, episode.getFilename());
 		values.put(KEY_DESCRIPTION, episode.getDescription());
 		values.put(KEY_PODCAST, episode.getPodcast());
+		values.put(KEY_POSITION, episode.getCurrentPosition());
 
         // insert row
         long episode_id = db.insert(TABLE_EPISODE, null, values);
@@ -143,7 +146,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT * FROM " + TABLE_PODCAST + " WHERE "
-                + KEY_ID + " = " + podcast_id;
+                + KEY_ID + " = '" + podcast_id + "';";
 
         Log.i(LOG, selectQuery);
 
@@ -183,6 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         episode.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         episode.setUrl(c.getString(c.getColumnIndex(KEY_URL)));
         episode.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
+        episode.setCurrentPosition(c.getFloat(c.getColumnIndex(KEY_POSITION)));
 
         return episode;
     }
@@ -210,6 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         episode.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         episode.setUrl(c.getString(c.getColumnIndex(KEY_URL)));
         episode.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
+        episode.setCurrentPosition(c.getFloat(c.getColumnIndex(KEY_POSITION)));
 
         return episode;
     }
@@ -237,8 +242,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 // adding to podcast list
                 podcasts.add(podcast);
-//                Log.d("POD", podcast.getTitle());
-//                Log.d("POD", podcast.getUrl());
                 } while (c.moveToNext());
         }
 
@@ -270,6 +273,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 episode.setUrl(c.getString(c.getColumnIndex(KEY_URL)));
                 episode.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
                 episode.setPodcast(c.getString(c.getColumnIndex(KEY_PODCAST)));
+                episode.setCurrentPosition(c.getFloat(c.getColumnIndex(KEY_POSITION)));
 
                 // adding to podcast list
                 episodes.add(episode);
@@ -297,6 +301,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_FILENAME, episode.getFilename());
 		values.put(KEY_DESCRIPTION, episode.getDescription());
 		values.put(KEY_PODCAST, episode.getPodcast());
+		values.put(KEY_POSITION, episode.getCurrentPosition());
 
         // updating row
         return db.update(TABLE_EPISODE, values, KEY_ID + " = ?",

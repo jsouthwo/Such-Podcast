@@ -21,7 +21,6 @@ import android.widget.Toast;
 public class AudioPlayerActivity extends Activity {
 
 	public TextView songName,episodeDescriptionBox,startTimeField,endTimeField;
-//	private boolean firstStart = true;
 	private MediaPlayer mediaPlayer;
 	private double startTime = 0;
 	private double finalTime = 0;
@@ -34,6 +33,7 @@ public class AudioPlayerActivity extends Activity {
 	private String episodeTitle, episodeDescription;
     private static DatabaseHelper helper;
     private static SQLiteDatabase db;
+    private RssItem episode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +45,17 @@ public class AudioPlayerActivity extends Activity {
 		helper = DatabaseHelper.getHelper(getApplicationContext());
 		db = helper.getWritableDatabase();
 
-		RssItem episode = helper.getEpisode(episodeTitle);
+		episode = helper.getEpisode(episodeTitle);
 		episodeDescription = episode.getDescription();
 		
 		//VIEWS
-		songName = (TextView)findViewById(R.id.textView4);
-		startTimeField =(TextView)findViewById(R.id.textView1);
-		endTimeField =(TextView)findViewById(R.id.textView2);
+		songName = (TextView)findViewById(R.id.title_text);
+		startTimeField =(TextView)findViewById(R.id.start_time);
+		endTimeField =(TextView)findViewById(R.id.end_time);
 		seekbar = (SeekBar)findViewById(R.id.seekBar1);
-		playButton = (ImageButton)findViewById(R.id.imageButton1);
-		pauseButton = (ImageButton)findViewById(R.id.imageButton2);
-		episodeDescriptionBox = (TextView)findViewById(R.id.textView5);
+		playButton = (ImageButton)findViewById(R.id.playButton);
+		pauseButton = (ImageButton)findViewById(R.id.pauseButton);
+		episodeDescriptionBox = (TextView)findViewById(R.id.description_text);
 		
 		//OTHER THINGS
 		songName.setText(episodeTitle);
@@ -70,10 +70,6 @@ public class AudioPlayerActivity extends Activity {
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public void play(View view){
 		mediaPlayer.start();
-//		if ( firstStart ) {
-//			mediaPlayer.seekTo((int)currentEpisode.getCurrentPosition());
-//		}
-//		firstStart = false;
 		finalTime = mediaPlayer.getDuration();
 		startTime = mediaPlayer.getCurrentPosition();
 		seekbar.setProgress(500);
@@ -82,13 +78,45 @@ public class AudioPlayerActivity extends Activity {
 			oneTimeOnly = 1;
 		} 
 
-		endTimeField.setText(String.format("%d min, %d sec", 
+		endTimeField.setText(String.format("%02d:%02d", 
 				TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
 				TimeUnit.MILLISECONDS.toSeconds((long) finalTime) - 
 				TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
 						toMinutes((long) finalTime)))
 				);
-		startTimeField.setText(String.format("%d min, %d sec", 
+		startTimeField.setText(String.format("%02d:%02d", 
+				TimeUnit.MILLISECONDS.toMinutes((long) startTime),
+				TimeUnit.MILLISECONDS.toSeconds((long) startTime) - 
+				TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
+						toMinutes((long) startTime)))
+				);
+		seekbar.setProgress((int)startTime);
+		myHandler.postDelayed(UpdateSongTime,100);
+		pauseButton.setEnabled(true);
+		playButton.setEnabled(false);
+		songName.setSelected(true);
+	}
+	
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+	public void resume(View view){
+		mediaPlayer.start();
+		Log.e("Caleb", String.valueOf(episode.getCurrentPosition()));
+		mediaPlayer.seekTo((int)episode.getCurrentPosition());
+		finalTime = mediaPlayer.getDuration();
+		startTime = mediaPlayer.getCurrentPosition();
+		seekbar.setProgress(500);
+		if(oneTimeOnly == 0){
+			seekbar.setMax((int) finalTime);
+			oneTimeOnly = 1;
+		} 
+
+		endTimeField.setText(String.format("%02d:%02d", 
+				TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
+				TimeUnit.MILLISECONDS.toSeconds((long) finalTime) - 
+				TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
+						toMinutes((long) finalTime)))
+				);
+		startTimeField.setText(String.format("%02d:%02d", 
 				TimeUnit.MILLISECONDS.toMinutes((long) startTime),
 				TimeUnit.MILLISECONDS.toSeconds((long) startTime) - 
 				TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
@@ -104,7 +132,7 @@ public class AudioPlayerActivity extends Activity {
 	private Runnable UpdateSongTime = new Runnable() {
 		@TargetApi(Build.VERSION_CODES.GINGERBREAD) public void run() {
 			startTime = mediaPlayer.getCurrentPosition();
-			startTimeField.setText(String.format("%d min, %d sec", 
+			startTimeField.setText(String.format("%02d:%02d", 
 					TimeUnit.MILLISECONDS.toMinutes((long) startTime),
 					TimeUnit.MILLISECONDS.toSeconds((long) startTime) - 
 					TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
@@ -160,14 +188,11 @@ public class AudioPlayerActivity extends Activity {
 	
 	@Override
 	public void onBackPressed() {
+		episode.setCurrentPosition(mediaPlayer.getCurrentPosition());
+		helper.updateEpisode(episode);
 		mediaPlayer.stop();
 		myHandler.removeCallbacks(UpdateSongTime);
 	    super.onBackPressed();
-//	    if ( (startTime / finalTime) <= .98 ) {
-//	    	currentEpisode.setCurrentPosition(startTime);
-//	    } else {
-//	    	currentEpisode.setCurrentPosition(0);
-//	    }
 	}
 
 }
