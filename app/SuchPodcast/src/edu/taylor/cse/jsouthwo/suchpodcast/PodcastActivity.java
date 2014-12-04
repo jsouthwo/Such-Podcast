@@ -78,7 +78,7 @@ public class PodcastActivity extends ActionBarActivity {
 				for (RssItem episode : helper.getEpisodes(Global.determinePodcastShortName(currentDisplayedPodcast.getTitle()))) {
 					PodcastActivity.adapter.add(episode.getTitle());
 					counter += 1;
-					if ( counter > 4 )
+					if ( counter > 5 )
 						break;
 				}
 			}
@@ -138,7 +138,7 @@ public class PodcastActivity extends ActionBarActivity {
 				manager.enqueue(request);
 				episodeCounter++;
 				helper.updateEpisode(episode);
-;			}
+			}
 		}
 	}
 

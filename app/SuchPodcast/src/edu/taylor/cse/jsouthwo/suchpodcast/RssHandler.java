@@ -69,8 +69,10 @@ public class RssHandler extends DefaultHandler {
             //End of an item so add the currentItem to the list of items.
         	DatabaseHelper helper = DatabaseHelper.getHelper(Global.getContext());
         	currentItem.setPodcast(Global.determinePodcastShortName(thisChannelTitle));
-        	helper.createEpisode(currentItem);
-            rssItemList.add(currentItem);
+        	if (titleCounter <= 7){
+        		helper.createEpisode(currentItem);
+        		rssItemList.add(currentItem);
+        	}
             currentItem = null;
         } else if (qName.equals("title"))
             parsingTitle = false;

@@ -184,6 +184,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         episode.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
         episode.setCurrentPosition(c.getFloat(c.getColumnIndex(KEY_POSITION)));
         episode.setPlayed(c.getInt(c.getColumnIndex(KEY_PLAYED)));
+        episode.setPodcast(c.getString(c.getColumnIndex(KEY_PODCAST)));
 
         return episode;
     }

@@ -194,14 +194,16 @@ public class AudioPlayerActivity extends Activity {
 	}
 	
 	private void mark(RssItem e){
-		Log.d("JS", "Calling mark.");
+
 		if (e.getPlayed() == 0){
-			Log.d("JS", "Marking " + e.getTitle());
+
 			String title = e.getTitle();
-			e.setTitle("[ALREADY PLAYED] " + title);
+			title = "** ALREADY PLAYED **   " + title;
+			e.setTitle(title);
+
 			e.setPlayed(1);
 			helper.updateEpisode(e);
-			Log.d("JS", "Marked.");
+
 		}
 	}
 
@@ -214,10 +216,16 @@ public class AudioPlayerActivity extends Activity {
 	
 	@Override
 	public void onBackPressed() {
-		episode.setCurrentPosition(mediaPlayer.getCurrentPosition());
-		helper.updateEpisode(episode);
-		mediaPlayer.stop();
-		myHandler.removeCallbacks(UpdateSongTime);
+		try {
+			episode.setCurrentPosition(mediaPlayer.getCurrentPosition());
+			helper.updateEpisode(episode);
+			mediaPlayer.stop();
+			myHandler.removeCallbacks(UpdateSongTime);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		
+//		PodcastActivity.resetAdapter(episode);
 	    super.onBackPressed();
 	}
 
