@@ -62,6 +62,8 @@ public class AudioPlayerActivity extends Activity {
 		episodeDescriptionBox.setText(episodeDescription);
 		
 		mediaPlayer = MediaPlayer.create(this, Uri.parse(episode.getFilename()));
+		Log.e("Caleb", episode.getFilename());
+		if ( mediaPlayer == null ) Log.e("Caleb", "null player");
 		seekbar.setClickable(false);
 		pauseButton.setEnabled(false);
 		songName.setSelected(true);
@@ -132,6 +134,8 @@ public class AudioPlayerActivity extends Activity {
 	private Runnable UpdateSongTime = new Runnable() {
 		@TargetApi(Build.VERSION_CODES.GINGERBREAD) public void run() {
 			startTime = mediaPlayer.getCurrentPosition();
+			episode.setCurrentPosition(mediaPlayer.getCurrentPosition());
+			helper.updateEpisode(episode);
 			startTimeField.setText(String.format("%02d:%02d", 
 					TimeUnit.MILLISECONDS.toMinutes((long) startTime),
 					TimeUnit.MILLISECONDS.toSeconds((long) startTime) - 
@@ -189,7 +193,7 @@ public class AudioPlayerActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		episode.setCurrentPosition(mediaPlayer.getCurrentPosition());
-		helper.updateEpisode(episode);
+//		helper.updateEpisode(episode);
 		mediaPlayer.stop();
 		myHandler.removeCallbacks(UpdateSongTime);
 	    super.onBackPressed();
