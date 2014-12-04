@@ -193,7 +193,7 @@ public class AudioPlayerActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		episode.setCurrentPosition(mediaPlayer.getCurrentPosition());
-//		helper.updateEpisode(episode);
+		helper.updateEpisode(episode);
 		mediaPlayer.stop();
 		myHandler.removeCallbacks(UpdateSongTime);
 	    super.onBackPressed();
