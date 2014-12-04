@@ -1,149 +1,129 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   xmlns:tools="http://schemas.android.com/tools"
-   android:layout_width="match_parent"
-   android:layout_height="match_parent"
-   android:paddingBottom="@dimen/activity_vertical_margin"
-   android:paddingLeft="@dimen/activity_horizontal_margin"
-   android:paddingRight="@dimen/activity_horizontal_margin"
-   android:paddingTop="@dimen/activity_vertical_margin"
-   tools:context=".MainActivity" >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
 
-   <ImageButton
-      android:id="@+id/imageButton3"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentLeft="true"
-      android:layout_marginBottom="14dp"
-      android:onClick="rewind"
-      android:src="@android:drawable/ic_media_rew"
-      android:contentDescription="rewind" />
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="14dp"
+        android:contentDescription="rewind"
+        android:onClick="rewind"
+        android:src="@android:drawable/ic_media_rew" />
 
-   <SeekBar
-      android:id="@+id/seekBar1"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content" 
-      android:layout_above="@+id/imageButton3"
-      android:layout_toLeftOf="@+id/end_time"
-      android:layout_toRightOf="@+id/start_time" />
+    <SeekBar
+        android:id="@+id/seekBar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageButton3"
+        android:layout_toLeftOf="@+id/end_time"
+        android:layout_toRightOf="@+id/start_time" />
 
-   <TextView
-      android:id="@+id/start_time"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignRight="@+id/imageButton3"
-      android:layout_alignTop="@+id/seekBar1"
-      android:text="@string/inital_Time"
-      android:textAppearance="?android:attr/textAppearanceSmall" />
+    <TextView
+        android:id="@+id/start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/imageButton3"
+        android:layout_alignTop="@+id/seekBar1"
+        android:text="@string/inital_Time"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-   <TextView
-      android:id="@+id/end_time"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignLeft="@+id/imageButton4"
-      android:layout_alignTop="@+id/seekBar1"
-      android:text="@string/inital_Time"
-      android:textAppearance="?android:attr/textAppearanceSmall" />
+    <TextView
+        android:id="@+id/end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageButton4"
+        android:layout_alignTop="@+id/seekBar1"
+        android:text="@string/inital_Time"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-   <TextView
-      android:id="@+id/textView3"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignLeft="@+id/imageButton3"
-      android:text="@string/hello_world"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageButton3"
+        android:text="@string/hello_world"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-   <TextView
-       android:id="@+id/title_text"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignBaseline="@+id/textView3"
-       android:layout_alignBottom="@+id/textView3"
-       android:layout_toRightOf="@+id/playButton"
-       android:ellipsize="marquee"
-       android:fadingEdge="horizontal"
-       android:marqueeRepeatLimit="marquee_forever"
-       android:scrollHorizontally="true"
-       android:singleLine="true" />
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView3"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_toRightOf="@+id/playButton"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true" />
 
-   <TextView
-       android:id="@+id/description_text"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignLeft="@+id/textView3"
-       android:layout_below="@+id/textView3"
-       android:layout_marginTop="20dp"
-       android:text="Description: "
-       android:textAppearance="?android:attr/textAppearanceMedium" />
+    <TextView
+        android:id="@+id/description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_below="@+id/textView3"
+        android:layout_marginTop="20dp"
+        android:text="Description: "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-   <Button
-       android:id="@+id/saveButton"
-       android:layout_width="64dp"
-       android:layout_height="64dp"
-       android:layout_above="@+id/seekBar1"
-       android:layout_alignLeft="@+id/start_time"
-       android:layout_marginBottom="19dp"
-       android:text="Save"
-       android:textSize="10dp" />
+    <ImageButton
+        android:id="@+id/resumeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBar1"
+        android:layout_toRightOf="@+id/imageButton3"
+        android:contentDescription="resume"
+        android:onClick="play"
+        android:src="@android:drawable/ic_media_previous" />
 
-   <Button
-       android:id="@+id/unsaveButton"
-       android:layout_width="64dp"
-       android:layout_height="64dp"
-       android:layout_alignTop="@+id/saveButton"
-       android:layout_centerHorizontal="true"
-       android:text="Unsave"
-       android:textSize="10dp"
-        />
+    <ImageButton
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBar1"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="play"
+        android:onClick="resume"
+        android:src="@android:drawable/ic_media_play" />
 
-   <Button
-       android:id="@+id/markAsReadButton"
-       android:layout_width="64dp"
-       android:layout_height="64dp"
-       android:layout_alignRight="@+id/end_time"
-       android:layout_alignTop="@+id/unsaveButton"
-       android:text="Mark as Played"
-       android:textSize="10dp" 
-       android:onClick="markAsPlayed" />
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/pauseButton"
+        android:layout_toRightOf="@+id/pauseButton"
+        android:contentDescription="fast-forward"
+        android:onClick="forward"
+        android:src="@android:drawable/ic_media_ff" />
 
-   <ImageButton
-       android:id="@+id/resumeButton"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_below="@+id/seekBar1"
-       android:layout_toRightOf="@+id/imageButton3"
-       android:contentDescription="resume"
-       android:onClick="play"
-       android:src="@android:drawable/ic_media_previous" />
+    <ImageButton
+        android:id="@+id/pauseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/title_text"
+        android:layout_below="@+id/seekBar1"
+        android:contentDescription="pause"
+        android:onClick="pause"
+        android:src="@android:drawable/ic_media_pause" />
 
-   <ImageButton
-       android:id="@+id/playButton"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignRight="@+id/unsaveButton"
-       android:layout_below="@+id/seekBar1"
-       android:contentDescription="play"
-       android:onClick="resume"
-       android:src="@android:drawable/ic_media_play" />
-
-   <ImageButton
-       android:id="@+id/imageButton4"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignTop="@+id/pauseButton"
-       android:layout_toRightOf="@+id/pauseButton"
-       android:contentDescription="fast-forward"
-       android:onClick="forward"
-       android:src="@android:drawable/ic_media_ff" />
-
-   <ImageButton
-       android:id="@+id/pauseButton"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignLeft="@+id/title_text"
-       android:layout_below="@+id/seekBar1"
-       android:contentDescription="pause"
-       android:onClick="pause"
-       android:src="@android:drawable/ic_media_pause" />
+    <Button
+        android:id="@+id/markAsReadButton"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_above="@+id/seekBar1"
+        android:layout_centerHorizontal="true"
+        android:text="Mark as Read"
+        android:onClick="markAsPlayed"
+        android:textSize="10dp" />
 
 </RelativeLayout>
