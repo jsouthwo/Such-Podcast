@@ -61,7 +61,12 @@ public class AudioPlayerActivity extends Activity {
 		songName.setText(episodeTitle);
 		episodeDescriptionBox.setText(episodeDescription);
 		
-		mediaPlayer = MediaPlayer.create(this, Uri.parse(episode.getFilename()));
+		try {
+			mediaPlayer = MediaPlayer.create(this, Uri.parse(episode.getFilename()));
+		} catch (NullPointerException e){
+			Toast.makeText(getApplicationContext(), "Try refreshing your podcasts first.", Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
+		}
 		seekbar.setClickable(false);
 		pauseButton.setEnabled(false);
 		songName.setSelected(true);
@@ -95,6 +100,8 @@ public class AudioPlayerActivity extends Activity {
 		pauseButton.setEnabled(true);
 		playButton.setEnabled(false);
 		songName.setSelected(true);
+		
+		mark(episode);
 	}
 	
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
@@ -127,6 +134,8 @@ public class AudioPlayerActivity extends Activity {
 		pauseButton.setEnabled(true);
 		playButton.setEnabled(false);
 		songName.setSelected(true);
+
+		mark(episode);
 	}
 
 	private Runnable UpdateSongTime = new Runnable() {
@@ -142,12 +151,14 @@ public class AudioPlayerActivity extends Activity {
 			myHandler.postDelayed(this, 100);
 		}
 	};
+
 	public void pause(View view){
 		mediaPlayer.pause();
 		pauseButton.setEnabled(false);
 		playButton.setEnabled(true);
 		songName.setSelected(true);
 	}	
+
 	public void forward(View view){
 		int temp = (int)startTime;
 		if((temp+forwardTime)<=finalTime){
@@ -176,7 +187,22 @@ public class AudioPlayerActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 			songName.setSelected(true);
 		}
+	}
 
+	public void markAsPlayed(View view){
+		mark(episode);
+	}
+	
+	private void mark(RssItem e){
+		Log.d("JS", "Calling mark.");
+		if (e.getPlayed() == 0){
+			Log.d("JS", "Marking " + e.getTitle());
+			String title = e.getTitle();
+			e.setTitle("[ALREADY PLAYED] " + title);
+			e.setPlayed(1);
+			helper.updateEpisode(e);
+			Log.d("JS", "Marked.");
+		}
 	}
 
 	@Override

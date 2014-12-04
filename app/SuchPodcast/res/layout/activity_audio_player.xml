@@ -102,8 +102,9 @@
        android:layout_height="64dp"
        android:layout_alignRight="@+id/end_time"
        android:layout_alignTop="@+id/unsaveButton"
-       android:text="Mark as Read"
-       android:textSize="10dp" />
+       android:text="Mark as Played"
+       android:textSize="10dp" 
+       android:onClick="markAsPlayed" />
 
    <ImageButton
        android:id="@+id/resumeButton"

@@ -45,6 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_CREATED_AT = "created_at";
     private static final String KEY_PODCAST = "podcast";
     private static final String KEY_POSITION = "current_position";
+    private static final String KEY_PLAYED = "played";
 
     /** Table Create Statements **/
     // PODCAST table create statement
@@ -53,8 +54,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    		KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
 	    		KEY_URL + " TEXT, " +
 	    		KEY_TITLE + " TEXT" +
-//	    		KEY_CREATED_AT + " DATETIME, " + 
-//	    		KEY_EPISODE_IDS + " LIST " + 
     		");";
 
     // EPISODE table create statement
@@ -67,7 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    		KEY_FILENAME + " TEXT, " +
 	    		KEY_DESCRIPTION + " TEXT, " +
 	    		KEY_PODCAST + " TEXT, " +
-	    		KEY_POSITION + " REAL" +
+	    		KEY_POSITION + " REAL, " +
+	    		KEY_PLAYED + " INTEGER" +
     		");";
 
     public static DatabaseHelper getHelper(Context context) {
@@ -86,11 +86,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        Log.i("DB", "Calling onCreate");
         db.execSQL(CREATE_TABLE_PODCAST);
         db.execSQL(CREATE_TABLE_EPISODE);
-//        Log.i("DB", CREATE_TABLE_PODCAST);
-//        Log.i("DB", CREATE_TABLE_EPISODE);
     }
  
     @Override
@@ -110,7 +107,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_URL, podcast.getUrl());
         values.put(KEY_TITLE, podcast.getTitle());
-//        values.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
         long podcast_id = db.insert(TABLE_PODCAST, null, values);
@@ -132,6 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_DESCRIPTION, episode.getDescription());
 		values.put(KEY_PODCAST, episode.getPodcast());
 		values.put(KEY_POSITION, episode.getCurrentPosition());
+		values.put(KEY_PLAYED, episode.getPlayed());
 
         // insert row
         long episode_id = db.insert(TABLE_EPISODE, null, values);
@@ -159,7 +156,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         podcast.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         podcast.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
         podcast.setUrl(c.getString(c.getColumnIndex(KEY_URL)));
-//        podcast.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
         return podcast;
     }
@@ -187,6 +183,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         episode.setUrl(c.getString(c.getColumnIndex(KEY_URL)));
         episode.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
         episode.setCurrentPosition(c.getFloat(c.getColumnIndex(KEY_POSITION)));
+        episode.setPlayed(c.getInt(c.getColumnIndex(KEY_PLAYED)));
 
         return episode;
     }
@@ -215,13 +212,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         episode.setUrl(c.getString(c.getColumnIndex(KEY_URL)));
         episode.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
         episode.setCurrentPosition(c.getFloat(c.getColumnIndex(KEY_POSITION)));
+        episode.setPlayed(c.getInt(c.getColumnIndex(KEY_PLAYED)));
 
         return episode;
     }
 
     /*
      * getting all podcasts
-     * */
+     */
     public List<Podcast> getAllPodcasts() {
         List<Podcast> podcasts = new ArrayList<Podcast>();
         String selectQuery = "SELECT * FROM " + TABLE_PODCAST + " ORDER BY " + KEY_TITLE + ";";
@@ -274,6 +272,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 episode.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
                 episode.setPodcast(c.getString(c.getColumnIndex(KEY_PODCAST)));
                 episode.setCurrentPosition(c.getFloat(c.getColumnIndex(KEY_POSITION)));
+                episode.setPlayed(c.getInt(c.getColumnIndex(KEY_PLAYED)));
 
                 // adding to podcast list
                 episodes.add(episode);
@@ -302,6 +301,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_DESCRIPTION, episode.getDescription());
 		values.put(KEY_PODCAST, episode.getPodcast());
 		values.put(KEY_POSITION, episode.getCurrentPosition());
+		values.put(KEY_PLAYED, episode.getPlayed());
 
         // updating row
         return db.update(TABLE_EPISODE, values, KEY_ID + " = ?",
@@ -325,7 +325,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_EPISODE, KEY_ID + " = ?",
                 new String[] { String.valueOf(episode_id) });
     }
-
 
     /**************************** Random *****************************/
 

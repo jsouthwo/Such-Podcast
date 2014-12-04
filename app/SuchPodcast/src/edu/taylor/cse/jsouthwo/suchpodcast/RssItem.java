@@ -32,8 +32,15 @@ public class RssItem {
     private String imageUrl;
     private String localDirName;
     private float currentPosition = 0;
+    private int played = 0;
 
-    public int getId() {
+    public int getPlayed() {
+		return played;
+	}
+	public void setPlayed(int played) {
+		this.played = played;
+	}
+	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
